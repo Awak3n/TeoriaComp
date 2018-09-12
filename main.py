@@ -63,11 +63,12 @@ def conversion(lines):
                     break
             lc1.append(int(param1))
             lc2.append(int(param2))
-            if int(param1) == 0 or int(param1) > len(lines)-2:
+            print(len(lines))
+            if int(param1) == 0 or int(param1) > len(lines):
                 opc1.append("parada")
             else:
                 opc1.append("None")  # mais tarde, 'None' serão substituidos
-            if int(param2) == 0 or int(param2) > len(lines)-2:
+            if int(param2) == 0 or int(param2) > len(lines):
                 opc2.append("parada")
             else:
                 opc2.append("None")  # mais tarde, 'None' serão substituidos
