@@ -97,10 +97,10 @@ def conversion(lines):
                         position_p2 += 1
                     else:
                         break
-                opc1.append(param1)
-                opc2.append(param1)
                 lc1.append(int(param2))
                 lc2.append(int(param2))
+                opc1.append(param1)
+                opc2.append(param1)
                 #print(param1)
                 #print(param2)
             else:
