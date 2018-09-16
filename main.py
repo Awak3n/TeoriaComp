@@ -32,6 +32,17 @@ def main():
     """
     pass
 
+# verifica de quantos dígitos é o número do parâmetro
+def paramNumber(position, line):
+    param = ''
+    while position < len(line):
+        if line[position] != ' ':
+            param += line[position]
+            position += 1
+        else:
+            break
+    return param
+
 def conversion(lines):
     """Conversion recebe como parametro as linhas digitadas pelo o usuário e converter para versão composta"""
     opc1 = []  # vetor que irá guardar a primeira informação do programa composto, ou seja, a função que ele irá executar em caso de true
@@ -41,26 +52,14 @@ def conversion(lines):
     line_count = 1
     for line_original in lines:
         line = line_original.lower()
+        # se for um Se...
         if 'se' in line:
-            # se for um Se...
-            position_p1 = line.find('para ') + 5  # procura a posição do primeiro parâmentro
-            # verifica de quantos dígitos é o número do parâmetro
-            param1 = ''
-            while position_p1 < len(line):
-                if line[position_p1] != ' ':
-                    param1 += line[position_p1]
-                    position_p1 += 1
-                else:
-                    break
-            position_p2 = position_p1+line[position_p1:].find('para ') + 5  # procura a posição do segundo parâmentro
-            # verifica de quantos dígitos é o número do parâmetro
-            param2 = ''
-            while position_p2 < len(line):
-                if line[position_p2] != ' ':
-                    param2 += line[position_p2]
-                    position_p2 += 1
-                else:
-                    break
+            # procura a posição do primeiro parâmentro
+            position_p1 = line.find('para ') + 5  
+            param1 = paramNumber(position_p1, line)
+            # procura a posição do segundo parâmentro
+            position_p2 = position_p1+line[position_p1:].find('para ') + 5  
+            param2 = paramNumber(position_p2, line)
             lc1.append(int(param1))
             lc2.append(int(param2))
             print(len(lines))
@@ -74,29 +73,17 @@ def conversion(lines):
                 opc2.append("None")  # mais tarde, 'None' serão substituidos
             #print(param1)
             #print(param2)
-            #TODO: colocar exeções caso a sintaxe esteja errada
-            #TODO: implementar o metodo que substitui os nones pela função que é executada
+            #TODO: colocar exceções caso a sintaxe esteja errada
+            #TODO: implementar o metodo que substitui os nomes pela função que é executada
         else:
+            # se for um Faça...
             if 'faça' in line:
-                # se for um Faça...
-                position_p1 = line.find('faça ') + 5  # procura a posição do primeiro parâmentro
-                # verifica de quantos dígitos é o nome do parâmetro
-                param1 = ''
-                while position_p1 < len(line):
-                    if line[position_p1] != ' ':
-                        param1 += line_original[position_p1]
-                        position_p1 += 1
-                    else:
-                        break
-                position_p2 = position_p1 + line[position_p1:].find('para ') + 5  # procura a posição do segundo parâmentro
-                # verifica de quantos dígitos é o número do parâmetro
-                param2 = ''
-                while position_p2 < len(line):
-                    if line[position_p2] != ' ':
-                        param2 += line[position_p2]
-                        position_p2 += 1
-                    else:
-                        break
+                # procura a posição do primeiro parâmentro
+                position_p1 = line.find('faça ') + 5  
+                param1 = paramNumber(position_p1, line)
+                # procura a posição do segundo parâmentro
+                position_p2 = position_p1 + line[position_p1:].find('para ') + 5 
+                param2 = paramNumber(position_p2, line)
                 lc1.append(int(param2))
                 lc2.append(int(param2))
                 opc1.append(param1)
@@ -109,7 +96,7 @@ def conversion(lines):
     return formatt(opc1,lc1,opc2,lc2)
 
 def formatt(c1, c2, c3, c4):
-    """Função que fomata o texto da função composta"""
+    """Função que formata o texto da função composta"""
     aux = []
     x = 0
     while x < len(c1):
