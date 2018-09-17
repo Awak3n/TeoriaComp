@@ -74,7 +74,6 @@ def conversion(lines):
                     opc2.append("None")  # mais tarde, 'None' serão substituidos
                 # print(param1)
                 # print(param2)
-                # TODO: implementar o metodo que substitui os nones pela função que é executada
             except:
                 raise NameError("Erro - O programa digitado é inválido")
         else:
@@ -97,6 +96,7 @@ def conversion(lines):
                     raise NameError("Erro - O programa digitado é inválido")
             else:
                 raise NameError("Erro - O programa digitado é inválido")
+        # TODO: implementar o metodo que substitui os 'Nones' pela função que é executada
         line_count += 1  # conta a linha atual
     return formatt(opc1,lc1,opc2,lc2)
 
