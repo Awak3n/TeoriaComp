@@ -54,42 +54,47 @@ def conversion(lines):
         line = line_original.lower()
         # se for um Se...
         if 'se' in line:
-            # procura a posição do primeiro parâmentro
-            position_p1 = line.find('para ') + 5  
-            param1 = paramNumber(position_p1, line)
-            # procura a posição do segundo parâmentro
-            position_p2 = position_p1+line[position_p1:].find('para ') + 5  
-            param2 = paramNumber(position_p2, line)
-            lc1.append(int(param1))
-            lc2.append(int(param2))
-            print(len(lines))
-            if int(param1) == 0 or int(param1) > len(lines):
-                opc1.append("parada")
-            else:
-                opc1.append("None")  # mais tarde, 'None' serão substituidos
-            if int(param2) == 0 or int(param2) > len(lines):
-                opc2.append("parada")
-            else:
-                opc2.append("None")  # mais tarde, 'None' serão substituidos
-            #print(param1)
-            #print(param2)
-            #TODO: colocar exceções caso a sintaxe esteja errada
-            #TODO: implementar o metodo que substitui os nomes pela função que é executada
+            try:
+                # procura a posição do primeiro parâmentro
+                position_p1 = line.find('para ') + 5
+                param1 = paramNumber(position_p1, line)
+                # procura a posição do segundo parâmentro
+                position_p2 = position_p1+line[position_p1:].find('para ') + 5
+                param2 = paramNumber(position_p2, line)
+                lc1.append(int(param1))
+                lc2.append(int(param2))
+                print(len(lines))
+                if int(param1) == 0 or int(param1) > len(lines):
+                    opc1.append("parada")
+                else:
+                    opc1.append("None")  # mais tarde, 'None' serão substituidos
+                if int(param2) == 0 or int(param2) > len(lines):
+                    opc2.append("parada")
+                else:
+                    opc2.append("None")  # mais tarde, 'None' serão substituidos
+                # print(param1)
+                # print(param2)
+                # TODO: implementar o metodo que substitui os nomes pela função que é executada
+            except:
+                raise NameError("Erro - O programa digitado é inválido")
         else:
             # se for um Faça...
             if 'faça' in line:
-                # procura a posição do primeiro parâmentro
-                position_p1 = line.find('faça ') + 5  
-                param1 = paramNumber(position_p1, line)
-                # procura a posição do segundo parâmentro
-                position_p2 = position_p1 + line[position_p1:].find('para ') + 5 
-                param2 = paramNumber(position_p2, line)
-                lc1.append(int(param2))
-                lc2.append(int(param2))
-                opc1.append(param1)
-                opc2.append(param1)
-                #print(param1)
-                #print(param2)
+                try:
+                    # procura a posição do primeiro parâmentro
+                    position_p1 = line.find('faça ') + 5
+                    param1 = paramNumber(position_p1, line)
+                    # procura a posição do segundo parâmentro
+                    position_p2 = position_p1 + line[position_p1:].find('para ') + 5
+                    param2 = paramNumber(position_p2, line)
+                    lc1.append(int(param2))
+                    lc2.append(int(param2))
+                    opc1.append(param1)
+                    opc2.append(param1)
+                    # print(param1)
+                    # print(param2)
+                except:
+                    raise NameError("Erro - O programa digitado é inválido")
             else:
                 raise NameError("Erro - O programa digitado é inválido")
         line_count += 1  # conta a linha atual
