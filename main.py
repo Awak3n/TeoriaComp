@@ -74,7 +74,7 @@ def conversion(lines):
                     opc2.append("None")  # mais tarde, 'None' serão substituidos
                 # print(param1)
                 # print(param2)
-                # TODO: implementar o metodo que substitui os nomes pela função que é executada
+                # TODO: implementar o metodo que substitui os nones pela função que é executada
             except:
                 raise NameError("Erro - O programa digitado é inválido")
         else:
