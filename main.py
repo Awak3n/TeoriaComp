@@ -139,9 +139,11 @@ def formatt(c1, c2, c3, c4, ignore):
     """Função que formata o texto da função composta"""
     aux = []
     x = 0
+    id_f = 1
     while x < len(c1):
         if x not in ignore:
-            aux.append("(%s,%i),(%s,%i)" % (c1[x],c2[x],c3[x],c4[x]))
+            aux.append("%i: (%s,%i),(%s,%i)" % (id_f,c1[x],c2[x],c3[x],c4[x]))
+            id_f += 1
         x += 1
     return aux
 
