@@ -63,7 +63,6 @@ def conversion(lines):
                 param2 = paramNumber(position_p2, line)
                 lc1.append(int(param1))
                 lc2.append(int(param2))
-                print(len(lines))
                 if int(param1) == 0 or int(param1) > len(lines):
                     opc1.append("parada")
                 else:
@@ -82,7 +81,7 @@ def conversion(lines):
                 try:
                     # procura a posição do primeiro parâmentro
                     position_p1 = line.find('faça ') + 5
-                    param1 = paramNumber(position_p1, line)
+                    param1 = paramNumber(position_p1, line_original)
                     # procura a posição do segundo parâmentro
                     position_p2 = position_p1 + line[position_p1:].find('para ') + 5
                     param2 = paramNumber(position_p2, line)
@@ -98,27 +97,30 @@ def conversion(lines):
                 raise NameError("Erro - O programa digitado é inválido")
         # TODO: implementar o metodo que substitui os 'Nones' pela função que é executada
         line_count += 1  # conta a linha atual
-        opc1, lc1, opc2, lc2 = traduz(opc1,lc1,opc2,lc2)
+    opc1, lc1, opc2, lc2 = traduz(opc1, lc1, opc2, lc2)
     return formatt(opc1,lc1,opc2,lc2)
 
 def traduz(c1, c2, c3, c4):
     """Função que traduz de simples para composto"""
     # boa parte da função serve para criar um modelo de texto do fluxograma
-    aux = [0]  # um vetor auxiliar irá dizer quais linhas irão para o programa final, sendo que a primeira sempre vai
     x = 0
     while x < len(c1):
         y = c2[x] - 1
-        while "None" in c1[x]:
-            if "None" in c1[y]:
+        while c1[x] == 'None':
+            if c1[y] == 'None':
                 y = c2[y] - 1
             else:
-                c1[x] = c2[y]
+                c1[x] = c1[y]
+                if c1[y] == c3[y] and c2[y] == c4[y]:
+                    c2[x] = c2[y]
         y = c4[x] - 1
-        while "None" in c3[x]:
-            if "None" in c3[y]:
+        while c3[x] == 'None':
+            if c3[y] == 'None':
                 y = c4[y] - 1
             else:
-                c3[x] = c4[y]
+                c3[x] = c3[y]
+                if c1[y] == c3[y] and c2[y] == c4[y]:
+                    c4[x] = c4[y]
         x += 1
     return c1, c2, c3, c4
 
