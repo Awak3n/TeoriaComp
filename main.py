@@ -97,39 +97,49 @@ def conversion(lines):
                 raise NameError("Erro - O programa digitado é inválido")
         # TODO: implementar o metodo que substitui os 'Nones' pela função que é executada
         line_count += 1  # conta a linha atual
-    opc1, lc1, opc2, lc2 = traduz(opc1, lc1, opc2, lc2)
-    return formatt(opc1,lc1,opc2,lc2)
+    opc1, lc1, opc2, lc2, ignore = traduz(opc1, lc1, opc2, lc2)
+    return formatt(opc1,lc1,opc2,lc2,ignore)
 
 def traduz(c1, c2, c3, c4):
     """Função que traduz de simples para composto"""
     # boa parte da função serve para criar um modelo de texto do fluxograma
+    ignore = []  # lista de linhas desnecessárias no programa composto
     x = 0
     while x < len(c1):
         y = c2[x] - 1
         while c1[x] == 'None':
             if c1[y] == 'None':
                 y = c2[y] - 1
+                if x < y:
+                    ignore.append(y)
             else:
                 c1[x] = c1[y]
+                if x < y:
+                    ignore.append(y)
                 if c1[y] == c3[y] and c2[y] == c4[y]:
                     c2[x] = c2[y]
         y = c4[x] - 1
         while c3[x] == 'None':
             if c3[y] == 'None':
                 y = c4[y] - 1
+                if x < y:
+                    ignore.append(y)
             else:
                 c3[x] = c3[y]
+                if x < y:
+                    ignore.append(y)
                 if c1[y] == c3[y] and c2[y] == c4[y]:
                     c4[x] = c4[y]
         x += 1
-    return c1, c2, c3, c4
+    return c1, c2, c3, c4, ignore
 
-def formatt(c1, c2, c3, c4):
+def formatt(c1, c2, c3, c4, ignore):
     """Função que formata o texto da função composta"""
     aux = []
     x = 0
     while x < len(c1):
-        aux.append("(%s,%i),(%s,%i)" % (c1[x],c2[x],c3[x],c4[x]))
+        if x not in ignore:
+            aux.append("(%s,%i),(%s,%i)" % (c1[x],c2[x],c3[x],c4[x]))
         x += 1
     return aux
 
