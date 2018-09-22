@@ -103,6 +103,8 @@ def conversion(lines):
 
 def traduz(c1, c2, c3, c4):
     """Função que traduz de simples para composto"""
+    # boa parte da função serve para criar um modelo de texto do fluxograma
+    aux = [0]  # um vetor auxiliar irá dizer quais linhas irão para o programa final, sendo que a primeira sempre vai
     x = 0
     while x < len(c1):
         y = c2[x] - 1
@@ -117,7 +119,6 @@ def traduz(c1, c2, c3, c4):
                 y = c4[y] - 1
             else:
                 c3[x] = c4[y]
-
         x += 1
     return c1, c2, c3, c4
 
