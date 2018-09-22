@@ -98,7 +98,28 @@ def conversion(lines):
                 raise NameError("Erro - O programa digitado é inválido")
         # TODO: implementar o metodo que substitui os 'Nones' pela função que é executada
         line_count += 1  # conta a linha atual
+        opc1, lc1, opc2, lc2 = traduz(opc1,lc1,opc2,lc2)
     return formatt(opc1,lc1,opc2,lc2)
+
+def traduz(c1, c2, c3, c4):
+    """Função que traduz de simples para composto"""
+    x = 0
+    while x < len(c1):
+        y = c2[x] - 1
+        while "None" in c1[x]:
+            if "None" in c1[y]:
+                y = c2[y] - 1
+            else:
+                c1[x] = c2[y]
+        y = c4[x] - 1
+        while "None" in c3[x]:
+            if "None" in c3[y]:
+                y = c4[y] - 1
+            else:
+                c3[x] = c4[y]
+
+        x += 1
+    return c1, c2, c3, c4
 
 def formatt(c1, c2, c3, c4):
     """Função que formata o texto da função composta"""
