@@ -109,9 +109,10 @@ def traduz(c1, c2, c3, c4):
         y = c2[x] - 1
         while c1[x] == 'None':
             if c1[y] == 'None':
-                y = c2[y] - 1
                 if x < y:
                     ignore.append(y)
+                y = c2[y] - 1
+                c2[x] = c2[y]
             else:
                 c1[x] = c1[y]
                 if x < y:
@@ -121,9 +122,10 @@ def traduz(c1, c2, c3, c4):
         y = c4[x] - 1
         while c3[x] == 'None':
             if c3[y] == 'None':
-                y = c4[y] - 1
                 if x < y:
                     ignore.append(y)
+                y = c4[y] - 1
+                c4[x] = c4[y]
             else:
                 c3[x] = c3[y]
                 if x < y:
