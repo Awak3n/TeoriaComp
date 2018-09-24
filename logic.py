@@ -1,6 +1,7 @@
 from tkinter import messagebox
 
 #traduz de monolítica rotulada para formato de instruções compostas
+'''
 def trasnlation(line_p):
     line_count = 1
     info = input("%i: " % line_count)
@@ -15,14 +16,15 @@ def trasnlation(line_p):
 '''
 def trasnlation(line_p):
     line_count = 1
+    newline_p = ""
     for line in line_p.split('\n'):
-        newline_p = str(line_count) + ": " + line + "\n"
+        newline_p += str(line_count) + ": " + line + "\n"
         line_count += 1
     print("new: "+newline_p)
     line_p = conversion(newline_p)
     print(line_p)
     return line_p
-'''
+#'''
 # verifica de quantos dígitos é o número do parâmetro
 def paramNumber(position, line):
     param = ''
@@ -41,7 +43,7 @@ def conversion(lines):
     opc2 = []  # vetor que irá guardar a terceira informação do programa composto, ou seja, a função que ele irá executar em caso de false
     lc2 = []  # vetor que irá guardar a quarta informação do programa composto, ou seja, a linha que ele irá em caso de false
     line_count = 1
-    for line_original in lines:
+    for line_original in lines.split('\n'):
         line = line_original.lower()
         # se for um Se...
         if 'se' in line:
