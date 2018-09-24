@@ -20,6 +20,7 @@ def trasnlation(line_p):
     for line in line_p.split('\n'):
         newline_p += str(line_count) + ": " + line + "\n"
         line_count += 1
+    newline_p = newline_p[:-1]
     print("new: "+newline_p)
     line_p = conversion(newline_p)
     print(line_p)
