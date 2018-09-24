@@ -1,37 +1,28 @@
-line_p1s = []  # linhas do primeiro programa na versão que o usuário irá digitar
-line_p2s = []  # linhas do segundo programa na versão que o usuário irá digitar
-line_p1c = []  # linhas do primeiro programa na versão composta
-line_p2c = []  # linhas do segundo programa na versão composta
+from tkinter import messagebox
 
-def main():
-    print("Primeiro Programa")
-    print("Escreva o programa separando as linhas com enter e finalize com '")
+#traduz de monolítica rotulada para formato de instruções compostas
+def trasnlation(line_p):
     line_count = 1
     info = input("%i: " % line_count)
     while info != "'":
-        line_p1s.append(info)
+        line_p.append(info)
         line_count += 1
         info = input("%i: " % line_count)
-    print(line_p1s)
-    line_p1c = conversion(line_p1s)
+    print(line_p)
+    line_p1c = conversion(line_p)
     print(line_p1c)
-
-    # vou deixar a parte do programa 2 aqui, mas comentada pra agilizar na hora de fazer os testes
-    # na versão final a gente 'descomenta'
-    """
-    print("Segundo Programa")
-    print("Escreva o programa separando as linhas com enter e finalize com '")
+    return line_p1c
+'''
+def trasnlation(line_p):
     line_count = 1
-    info = input("%i: " % line_count)
-    while info != "'":
-        line_p2s.append(info)
+    for line in line_p.split('\n'):
+        newline_p = str(line_count) + ": " + line + "\n"
         line_count += 1
-        info = input("%i: " % line_count)
-    print(line_p2s)
-    line_p1c = conversion(line_p2s)
-    """
-    pass
-
+    print("new: "+newline_p)
+    line_p = conversion(newline_p)
+    print(line_p)
+    return line_p
+'''
 # verifica de quantos dígitos é o número do parâmetro
 def paramNumber(position, line):
     param = ''
@@ -74,7 +65,7 @@ def conversion(lines):
                 # print(param1)
                 # print(param2)
             except:
-                raise NameError("Erro - O programa digitado é inválido")
+                messagebox.showinfo(icon="error",title='Erro',message="Programa inválido.")
         else:
             # se for um Faça...
             if 'faça' in line:
@@ -92,9 +83,9 @@ def conversion(lines):
                     # print(param1)
                     # print(param2)
                 except:
-                    raise NameError("Erro - O programa digitado é inválido")
+                    messagebox.showinfo(icon="error",title='Erro',message="Programa inválido.")
             else:
-                raise NameError("Erro - O programa digitado é inválido")
+                messagebox.showinfo(icon="error",title='Erro',message="Programa inválido.")
         # TODO: implementar o metodo que substitui os 'Nones' pela função que é executada
         line_count += 1  # conta a linha atual
     opc1, lc1, opc2, lc2, ignore = traduz(opc1, lc1, opc2, lc2)
@@ -146,5 +137,3 @@ def formatt(c1, c2, c3, c4, ignore):
             id_f += 1
         x += 1
     return aux
-
-main()
