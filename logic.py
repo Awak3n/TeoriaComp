@@ -1,19 +1,7 @@
 from tkinter import messagebox
 
 #traduz de monolítica rotulada para formato de instruções compostas
-'''
-def trasnlation(line_p):
-    line_count = 1
-    info = input("%i: " % line_count)
-    while info != "'":
-        line_p.append(info)
-        line_count += 1
-        info = input("%i: " % line_count)
-    print(line_p)
-    line_p1c = conversion(line_p)
-    print(line_p1c)
-    return line_p1c
-'''
+
 def trasnlation(line_p):
     line_count = 1
     newline_p = ""

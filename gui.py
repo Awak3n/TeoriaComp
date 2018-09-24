@@ -3,9 +3,8 @@ try:
 	from tkinter import *
 	from tkinter import ttk
 	from tkinter import messagebox
-	from PIL import Image as pImg, ImageTk
 except:
-    print("Este programa requer Python 3.x e as bibliotecas Python-Tk e Pillow")
+    print("Este programa requer Python 3.x e a biblioteca Python-Tk")
     exit(0)
 
 #Classe principal
