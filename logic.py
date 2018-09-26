@@ -124,13 +124,11 @@ def traduz(c1, c2, c3, c4):
                         if c4[y] <= min(ignore):
                             c4[x] = c4[y]
         x += 1
-    '''if ((c2[x - 1] >= len(seq) or c2[x - 1] == 0) and c1[x - 1] != 'parada') or (
-            (c4[x - 1] >= len(seq) or c4[x - 1] == 0) and c3[x - 1] != 'parada'):
+    if max(seq) >= len(c1):  # caso haja um teste que aponte para uma parada adiciona uma parada ao código
         c1.append('parada')
         c2.append(0)
         c3.append('parada')
         c4.append(0)
-        seq.append(len(seq))'''
     return c1, c2, c3, c4, seq
 
 def formatt(c1, c2, c3, c4, seq):
