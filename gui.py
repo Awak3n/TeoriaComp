@@ -34,9 +34,9 @@ class Application():
 			messagebox.showinfo(icon="error",title='Erro',message="Um dos campos está vazio.")
 		else:
 			print("Primeiro programa:\n" + self.line_p1)
-			logic.trasnlation(self.line_p1)
+			logic.translation(self.line_p1)
 			#print("Segundo programa:\n" + self.line_p2)
-			#logic.trasnlation(self.line_p2)
+			#logic.translation(self.line_p2)
 			
 
 #inicialização do programa

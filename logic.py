@@ -1,15 +1,17 @@
 from tkinter import messagebox
+import re
 
 #traduz de monolítica rotulada para formato de instruções compostas
 
-def trasnlation(line_p):
+def translation(line_p):
     line_count = 1
-    newline_p = ""
+    newline_p = '' #string que irá salvar o programa formatado
     for line in line_p.split('\n'):
-        newline_p += str(line_count) + ": " + line + "\n"
-        line_count += 1
+        if (line != ''):
+            newline_p += str(line_count) + ": " + line + '\n'
+            line_count += 1
     newline_p = newline_p[:-1]
-    print("new: "+newline_p)
+    print("new= " + newline_p)
     line_p = conversion(newline_p)
     print(line_p)
     return line_p
@@ -41,7 +43,7 @@ def conversion(lines):
                 position_p1 = line.find('para ') + 5
                 param1 = paramNumber(position_p1, line)
                 # procura a posição do segundo parâmentro
-                position_p2 = position_p1+line[position_p1:].find('para ') + 5
+                position_p2 = position_p1 + line[position_p1:].find('para ') + 5
                 param2 = paramNumber(position_p2, line)
                 lc1.append(int(param1))
                 lc2.append(int(param2))
@@ -135,6 +137,7 @@ def formatt(c1, c2, c3, c4, seq):
     """Função que formata o texto da função composta"""
     aux = []
     id_f = 1
+    seq.remove(-1)
     for x in seq:
         if c2[x]<0 or c2[x]>len(seq):  # formaliza a parada em 0
             c2[x] = 0
@@ -143,4 +146,3 @@ def formatt(c1, c2, c3, c4, seq):
         aux.append("%i: (%s,%i),(%s,%i)" % (id_f,c1[x],c2[x],c3[x],c4[x]))
         id_f += 1
     return aux
-
