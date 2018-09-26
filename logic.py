@@ -1,5 +1,4 @@
 from tkinter import messagebox
-import re
 
 #traduz de monolítica rotulada para formato de instruções compostas
 
