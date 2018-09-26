@@ -85,7 +85,7 @@ def conversion(lines):
 def traduz(c1, c2, c3, c4):
     """Função que traduz de simples para composto"""
     # boa parte da função serve para criar um modelo de texto do fluxograma
-    ignore = []  # lista de linhas desnecessárias no programa composto
+    ignore = []  # conjunto de linhas desnecessárias no programa composto
     seq = [0]  # lista de linhas necessárias no programa composto, o primeiro sempre é traduzido
     x = 0
     while x < len(c1):  # enquanto ainda tiver codigo para traduzir
@@ -97,34 +97,34 @@ def traduz(c1, c2, c3, c4):
                 if x < y:
                     ignore.append(y)
                 y = c2[y] - 1
-                c2[x] = c2[y]  # o teste original irá apontar para onde apontava o teste final
+                c2[x] = c2[y]-len(set(ignore))  # o teste original irá apontar para onde apontava o teste final
             else:
                 c1[x] = c1[y]  # e fazer a função que ele fazia
                 if x < y:
                     ignore.append(y)
-                elif c1[y] == c3[y] and c2[y] == c4[y]:  # se for um faça o teste irá apontar para onde o faça aponta
-                    c2[x] = c2[y]
+                if c1[y] == c3[y] and c2[y] == c4[y]:  # se for um faça o teste irá apontar para onde o faça aponta
+                    c2[x] = c2[y]-len(set(ignore))
         y = c4[x] - 1  # ve para onde o campo de false está apontando
         while c3[x] == 'None':  # se o código se deparar com um teste ele irá verificar a próxima linha de comando
             if c3[y] == 'None':  # se a próxima linha de comando for outro teste ele irá a ignorar e ver para onde ela aponta
                 if x < y:
                     ignore.append(y)
                 y = c4[y] - 1
-                c4[x] = c4[y]  # o teste original irá apontar para onde apontava o teste final
+                c4[x] = c4[y]-len(set(ignore))  # o teste original irá apontar para onde apontava o teste final
             else:
                 c3[x] = c3[y]  # e fazer a função que ele fazia
                 if x < y:
                     ignore.append(y)
-                elif c1[y] == c3[y] and c2[y] == c4[y]:  # se for um faça o teste irá apontar para onde o faça aponta
-                        c4[x] = c4[y]
+                if c1[y] == c3[y] and c2[y] == c4[y]:  # se for um faça o teste irá apontar para onde o faça aponta
+                        c4[x] = c4[y]-len(set(ignore))
         x += 1
-    if ((c2[x - 1] >= len(seq) or c2[x - 1] == 0) and c1[x - 1] != 'parada') or (
+    '''if ((c2[x - 1] >= len(seq) or c2[x - 1] == 0) and c1[x - 1] != 'parada') or (
             (c4[x - 1] >= len(seq) or c4[x - 1] == 0) and c3[x - 1] != 'parada'):
         c1.append('parada')
         c2.append(0)
         c3.append('parada')
         c4.append(0)
-        seq.append(len(seq))
+        seq.append(len(seq))'''
     return c1, c2, c3, c4, seq
 
 def formatt(c1, c2, c3, c4, seq):
@@ -132,6 +132,10 @@ def formatt(c1, c2, c3, c4, seq):
     aux = []
     id_f = 1
     for x in seq:
+        if c2[x]<0 or c2[x]>len(seq):
+            c2[x] = 0
+        if c4[x] < 0 or c4[x] > len(seq):
+            c4[x] = 0
         aux.append("%i: (%s,%i),(%s,%i)" % (id_f,c1[x],c2[x],c3[x],c4[x]))
         id_f += 1
     return aux
