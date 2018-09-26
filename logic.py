@@ -85,46 +85,62 @@ def conversion(lines):
 def traduz(c1, c2, c3, c4):
     """Função que traduz de simples para composto"""
     # boa parte da função serve para criar um modelo de texto do fluxograma
-    ignore = []  # lista de linhas desnecessárias no programa composto
+    ignore = []  # conjunto de linhas desnecessárias no programa composto
+    seq = [0]  # lista de linhas necessárias no programa composto, o primeiro sempre é traduzido
     x = 0
-    while x < len(c1):
-        y = c2[x] - 1
-        while c1[x] == 'None':
-            if c1[y] == 'None':
+    while x < len(c1):  # enquanto ainda tiver codigo para traduzir
+        y = c2[x] - 1  # ve para onde o campo de true está apontando
+        if c1[x] == c3[x] and c2[x] == c4[x]:  # sempre que houver uma função faça a proxima linha de comando é garantida na tradução
+            seq.append(y)
+        while c1[x] == 'None':  # se o código se deparar com um teste ele irá verificar a próxima linha de comando
+            if c1[y] == 'None':  # se a próxima linha de comando for outro teste ele irá a ignorar e ver para onde ela aponta
                 if x < y:
                     ignore.append(y)
                 y = c2[y] - 1
-                c2[x] = c2[y]
+                c2[x] = c2[y]-len(set(ignore))  # o teste original irá apontar para onde apontava o teste final
             else:
-                c1[x] = c1[y]
+                c1[x] = c1[y]  # e fazer a função que ele fazia
                 if x < y:
                     ignore.append(y)
-                elif c1[y] == c3[y] and c2[y] == c4[y]:
-                    c2[x] = c2[y]
-        y = c4[x] - 1
-        while c3[x] == 'None':
-            if c3[y] == 'None':
+                if c1[y] == c3[y] and c2[y] == c4[y]:  # se for um faça o teste irá apontar para onde o faça aponta
+                    c2[x] = c2[y] - len(set(ignore))
+                    if len(ignore)>0:
+                        if c2[y] <= min(ignore):
+                            c2[x] = c2[y]
+        y = c4[x] - 1  # ve para onde o campo de false está apontando
+        while c3[x] == 'None':  # se o código se deparar com um teste ele irá verificar a próxima linha de comando
+            if c3[y] == 'None':  # se a próxima linha de comando for outro teste ele irá a ignorar e ver para onde ela aponta
                 if x < y:
                     ignore.append(y)
                 y = c4[y] - 1
-                c4[x] = c4[y]
+                c4[x] = c4[y]-len(set(ignore))  # o teste original irá apontar para onde apontava o teste final
             else:
-                c3[x] = c3[y]
+                c3[x] = c3[y]  # e fazer a função que ele fazia
                 if x < y:
                     ignore.append(y)
-                elif c1[y] == c3[y] and c2[y] == c4[y]:
-                        c4[x] = c4[y]
+                if c1[y] == c3[y] and c2[y] == c4[y]:  # se for um faça o teste irá apontar para onde o faça aponta
+                    c4[x] = c4[y] - len(set(ignore))
+                    if len(ignore)>0:
+                        if c4[y] <= min(ignore):
+                            c4[x] = c4[y]
         x += 1
-    return c1, c2, c3, c4, ignore
+    if max(seq) >= len(c1):  # caso haja um teste que aponte para uma parada adiciona uma parada ao código
+        c1.append('parada')
+        c2.append(0)
+        c3.append('parada')
+        c4.append(0)
+    return c1, c2, c3, c4, seq
 
-def formatt(c1, c2, c3, c4, ignore):
+def formatt(c1, c2, c3, c4, seq):
     """Função que formata o texto da função composta"""
     aux = []
-    x = 0
     id_f = 1
-    while x < len(c1):
-        if x not in ignore:
-            aux.append("%i: (%s,%i),(%s,%i)" % (id_f,c1[x],c2[x],c3[x],c4[x]))
-            id_f += 1
-        x += 1
+    for x in seq:
+        if c2[x]<0 or c2[x]>len(seq):  # formaliza a parada em 0
+            c2[x] = 0
+        if c4[x] < 0 or c4[x] > len(seq):
+            c4[x] = 0
+        aux.append("%i: (%s,%i),(%s,%i)" % (id_f,c1[x],c2[x],c3[x],c4[x]))
+        id_f += 1
     return aux
+
