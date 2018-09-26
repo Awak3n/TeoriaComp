@@ -38,12 +38,20 @@ def conversion(lines):
         line = line_original.lower()
         # se for um Se...
         if 'se' in line:
+            print("a")
             try:
                 # procura a posição do primeiro parâmentro
                 position_p1 = line.find('para ') + 5
+                if (line[position_p1] == line[0]): 
+                    messagebox.showinfo(icon="warning", title='Ciclo infinito', message="A instrução " + str(line[0]) + " aponta para ela mesma.")
+                    pass  
                 param1 = paramNumber(position_p1, line)
                 # procura a posição do segundo parâmentro
                 position_p2 = position_p1 + line[position_p1:].find('para ') + 5
+                print("%d" % position_p2)
+                if (line[position_p2] == line[0]): 
+                    messagebox.showinfo(icon="warning", title='Ciclo infinito', message="A instrução " + str(line[0]) + " aponta para ela mesma.")
+                    pass
                 param2 = paramNumber(position_p2, line)
                 lc1.append(int(param1))
                 lc2.append(int(param2))
@@ -68,6 +76,9 @@ def conversion(lines):
                     param1 = paramNumber(position_p1, line_original)
                     # procura a posição do segundo parâmentro
                     position_p2 = position_p1 + line[position_p1:].find('para ') + 5
+                    if (line[position_p2] == line[0]): 
+                        messagebox.showinfo(icon="warning", title='Ciclo infinito', message="A instrução " + str(line[0]) + " aponta para ela mesma.")
+                        pass
                     param2 = paramNumber(position_p2, line)
                     lc1.append(int(param2))
                     lc2.append(int(param2))
