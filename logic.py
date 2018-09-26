@@ -9,11 +9,14 @@ def translation(line_p):
         if (line != ''):
             newline_p += str(line_count) + ": " + line + '\n'
             line_count += 1
-    newline_p = newline_p[:-1]
-    print("new= " + newline_p)
-    line_p = conversion(newline_p)
-    print(line_p)
-    return line_p
+    if (line_count == 1):
+        messagebox.showinfo(icon="error",title='Erro',message="Programa inválido.")
+    else:
+        newline_p = newline_p[:-1]
+        print("new= " + newline_p)
+        line_p = conversion(newline_p)
+        print(line_p)
+        return line_p
 #'''
 # verifica de quantos dígitos é o número do parâmetro
 def paramNumber(position, line):
@@ -42,14 +45,14 @@ def conversion(lines):
                 position_p1 = line.find('para ') + 5
                 if (line[position_p1] == line[0]): 
                     messagebox.showinfo(icon="warning", title='Ciclo infinito', message="A instrução " + str(line[0]) + " aponta para ela mesma.")
-                    pass  
+                    return  
                 param1 = paramNumber(position_p1, line)
                 # procura a posição do segundo parâmentro
                 position_p2 = position_p1 + line[position_p1:].find('para ') + 5
                 print("%d" % position_p2)
                 if (line[position_p2] == line[0]): 
                     messagebox.showinfo(icon="warning", title='Ciclo infinito', message="A instrução " + str(line[0]) + " aponta para ela mesma.")
-                    pass
+                    return
                 param2 = paramNumber(position_p2, line)
                 lc1.append(int(param1))
                 lc2.append(int(param2))
@@ -76,7 +79,7 @@ def conversion(lines):
                     position_p2 = position_p1 + line[position_p1:].find('para ') + 5
                     if (line[position_p2] == line[0]): 
                         messagebox.showinfo(icon="warning", title='Ciclo infinito', message="A instrução " + str(line[0]) + " aponta para ela mesma.")
-                        pass
+                        return 
                     param2 = paramNumber(position_p2, line)
                     lc1.append(int(param2))
                     lc2.append(int(param2))
