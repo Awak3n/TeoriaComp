@@ -103,7 +103,10 @@ def traduz(c1, c2, c3, c4):
                 if x < y:
                     ignore.append(y)
                 if c1[y] == c3[y] and c2[y] == c4[y]:  # se for um faça o teste irá apontar para onde o faça aponta
-                    c2[x] = c2[y]-len(set(ignore))
+                    c2[x] = c2[y] - len(set(ignore))
+                    if len(ignore)>0:
+                        if c2[y] <= min(ignore):
+                            c2[x] = c2[y]
         y = c4[x] - 1  # ve para onde o campo de false está apontando
         while c3[x] == 'None':  # se o código se deparar com um teste ele irá verificar a próxima linha de comando
             if c3[y] == 'None':  # se a próxima linha de comando for outro teste ele irá a ignorar e ver para onde ela aponta
@@ -116,7 +119,10 @@ def traduz(c1, c2, c3, c4):
                 if x < y:
                     ignore.append(y)
                 if c1[y] == c3[y] and c2[y] == c4[y]:  # se for um faça o teste irá apontar para onde o faça aponta
-                        c4[x] = c4[y]-len(set(ignore))
+                    c4[x] = c4[y] - len(set(ignore))
+                    if len(ignore)>0:
+                        if c4[y] <= min(ignore):
+                            c4[x] = c4[y]
         x += 1
     '''if ((c2[x - 1] >= len(seq) or c2[x - 1] == 0) and c1[x - 1] != 'parada') or (
             (c4[x - 1] >= len(seq) or c4[x - 1] == 0) and c3[x - 1] != 'parada'):
@@ -132,7 +138,7 @@ def formatt(c1, c2, c3, c4, seq):
     aux = []
     id_f = 1
     for x in seq:
-        if c2[x]<0 or c2[x]>len(seq):
+        if c2[x]<0 or c2[x]>len(seq):  # formaliza a parada em 0
             c2[x] = 0
         if c4[x] < 0 or c4[x] > len(seq):
             c4[x] = 0
