@@ -38,7 +38,6 @@ def conversion(lines):
         line = line_original.lower()
         # se for um Se...
         if 'se' in line:
-            print("a")
             try:
                 # procura a posição do primeiro parâmentro
                 position_p1 = line.find('para ') + 5
