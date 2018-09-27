@@ -49,7 +49,6 @@ def conversion(lines):
                 param1 = paramNumber(position_p1, line)
                 # procura a posição do segundo parâmentro
                 position_p2 = position_p1 + line[position_p1:].find('para ') + 5
-                print("%d" % position_p2)
                 if (line[position_p2] == line[0]): 
                     messagebox.showinfo(icon="warning", title='Ciclo infinito', message="A instrução " + str(line[0]) + " aponta para ela mesma.")
                     return
@@ -141,7 +140,7 @@ def traduz(c1, c2, c3, c4):
                         if c4[y] <= min(ignore):
                             c4[x] = c4[y]
         x += 1
-     if max(seq) >= len(c1) or -1 in seq:  # caso haja um teste que aponte para uma parada adiciona uma parada ao código
+    if max(seq) >= len(c1) or -1 in seq:  # caso haja um teste que aponte para uma parada adiciona uma parada ao código
         c1.append('parada')
         c2.append(0)
         c3.append('parada')
