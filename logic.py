@@ -53,6 +53,9 @@ def conversion(lines):
                 if (line[position_p2] == line[0]): 
                     messagebox.showinfo(icon="warning", title='Ciclo infinito', message="A instrução " + str(line[0]) + " aponta para ela mesma.")
                     return
+                if (line[position_p1] == line[position_p2]):
+                    messagebox.showinfo(icon="error", title='Erro', message="A instrução " + str(line[0]) + " aponta para o mesmo lugar mais de uma vez.")
+                    return
                 param2 = paramNumber(position_p2, line)
                 lc1.append(int(param1))
                 lc2.append(int(param2))
@@ -138,30 +141,23 @@ def traduz(c1, c2, c3, c4):
                         if c4[y] <= min(ignore):
                             c4[x] = c4[y]
         x += 1
-    if max(seq) >= len(c1) or -1 in seq:  # caso haja um teste que aponte para uma parada adiciona uma parada ao código
+    if max(seq) >= len(c1):  # caso haja um teste que aponte para uma parada adiciona uma parada ao código
         c1.append('parada')
         c2.append(0)
         c3.append('parada')
         c4.append(0)
-        if -1 in seq:  # caso haja um parada direto para 0 redefine para o final
-            seq.remove(-1)
-            seq.append(x)
     return c1, c2, c3, c4, seq
 
 def formatt(c1, c2, c3, c4, seq):
     """Função que formata o texto da função composta"""
     aux = []
     id_f = 1
+    seq.remove(-1)
     for x in seq:
-        if c2[x] <= 0 and c1[x] != 'parada':  # corrige alguns apontamentos de parada
-            c2[x] = len(seq)
-        if c4[x] <= 0 and c3[x] != 'parada':
-            c4[x] = len(seq)
-        if c2[x] < 0 and c1[x] == 'parada':  # formaliza as paradas em 0
+        if c2[x]<0 or c2[x]>len(seq):  # formaliza a parada em 0
             c2[x] = 0
-        if c4[x] < 0 and c3[x] == 'parada':
+        if c4[x] < 0 or c4[x] > len(seq):
             c4[x] = 0
-        aux.append("%i: (%s,%i),(%s,%i)" % (id_f, c1[x], c2[x], c3[x], c4[x]))
+        aux.append("%i: (%s,%i),(%s,%i)" % (id_f,c1[x],c2[x],c3[x],c4[x]))
         id_f += 1
     return aux
-
