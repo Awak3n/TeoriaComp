@@ -10,7 +10,7 @@ def translation(line_p):
             newline_p += str(line_count) + ": " + line + '\n'
             line_count += 1
     if (line_count == 1):
-        messagebox.showinfo(icon="error",title='Erro',message="Programa inválido.")
+        messagebox.showinfo(icon="error",title='Erro',message="Programa vazio.")
     else:
         newline_p = newline_p[:-1]
         print("new= " + newline_p)
