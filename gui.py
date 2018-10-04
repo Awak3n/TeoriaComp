@@ -55,7 +55,7 @@ class Application():
 				
 	def action_n2(self,event):
 		'''Comparação do programa'''
-		print("nada aqui")
+		print("nada aqui meu")
 
 	def textFormat(self,array):
 		text = ''
