@@ -4,22 +4,23 @@ from tkinter import messagebox
 
 def translation(line_p):
     line_count = 1
-    newline_p = '' #string que irá salvar o programa formatado
+    newline_p = [] #string que irá salvar o programa formatado
     for line in line_p.split('\n'):
         if (line != ''):
-            newline_p += str(line_count) + ": " + line + '\n'
+            newline_p.append("%i: %s" % (line_count, line))
             line_count += 1
     if (line_count == 1):
         messagebox.showinfo(icon="error",title='Erro',message="Programa vazio.")
     else:
-        newline_p = newline_p[:-1]
-        print("new= " + newline_p)
-        line_p = conversion(newline_p)
-        print(line_p)
-        return line_p
-#'''
-# verifica de quantos dígitos é o número do parâmetro
+        #newline_p = newline_p[:-1]
+        print("new= ")
+        print(newline_p)
+        newline_p = conversion(newline_p)
+        print(newline_p)
+        return newline_p
+
 def paramNumber(position, line):
+    '''Verifica de quantos dígitos é o número do parâmetro'''
     param = ''
     while position < len(line):
         if line[position] != ' ':
@@ -36,7 +37,7 @@ def conversion(lines):
     opc2 = []  # vetor que irá guardar a terceira informação do programa composto, ou seja, a função que ele irá executar em caso de false
     lc2 = []  # vetor que irá guardar a quarta informação do programa composto, ou seja, a linha que ele irá em caso de false
     line_count = 1
-    for line_original in lines.split('\n'):
+    for line_original in lines:
         line = line_original.lower()
         # se for um Se...
         if 'se' in line:
@@ -95,50 +96,40 @@ def conversion(lines):
                 messagebox.showinfo(icon="error",title='Erro',message="Programa inválido.")
         # TODO: implementar o metodo que substitui os 'Nones' pela função que é executada
         line_count += 1  # conta a linha atual
-    opc1, lc1, opc2, lc2, ignore = traduz(opc1, lc1, opc2, lc2)
+    opc1, lc1, opc2, lc2, ignore = translate(opc1, lc1, opc2, lc2)
     return formatt(opc1,lc1,opc2,lc2,ignore)
 
-def traduz(c1, c2, c3, c4):
+def ifVerification(x, ca, cb, cc, cd, ignore):
+    '''Verificação das instruções se'''
+    y = cb[x] - 1  # ve para onde o campo está apontando
+    while ca[x] == 'None':  # se o código se deparar com um teste ele irá verificar a próxima linha de comando
+        if ca[y] == 'None':  # se a próxima linha de comando for outro teste ele irá a ignorar e ver para onde ela aponta
+            if x < y:
+                ignore.append(y)
+            y = cb[y] - 1
+            cb[x] = cb[y]-len(set(ignore))  # o teste original irá apontar para onde apontava o teste final
+        else:
+            ca[x] = ca[y]  # e fazer a função que ele fazia
+            if x < y:
+                ignore.append(y)
+            if ca[y] == cc[y] and cb[y] == cd[y]:  # se for um faça o teste irá apontar para onde o faça aponta
+                cb[x] = cb[y] - len(set(ignore))
+                if len(ignore)>0:
+                    if cb[y] <= min(ignore):
+                        cb[x] = cb[y]
+    return ca, cb, ignore
+
+def translate(c1, c2, c3, c4):
     """Função que traduz de simples para composto"""
     # boa parte da função serve para criar um modelo de texto do fluxograma
     ignore = []  # conjunto de linhas desnecessárias no programa composto
     seq = [0]  # lista de linhas necessárias no programa composto, o primeiro sempre é traduzido
     x = 0
     while x < len(c1):  # enquanto ainda tiver codigo para traduzir
-        y = c2[x] - 1  # ve para onde o campo de true está apontando
         if c1[x] == c3[x] and c2[x] == c4[x]:  # sempre que houver uma função faça a proxima linha de comando é garantida na tradução
-            seq.append(y)
-        while c1[x] == 'None':  # se o código se deparar com um teste ele irá verificar a próxima linha de comando
-            if c1[y] == 'None':  # se a próxima linha de comando for outro teste ele irá a ignorar e ver para onde ela aponta
-                if x < y:
-                    ignore.append(y)
-                y = c2[y] - 1
-                c2[x] = c2[y]-len(set(ignore))  # o teste original irá apontar para onde apontava o teste final
-            else:
-                c1[x] = c1[y]  # e fazer a função que ele fazia
-                if x < y:
-                    ignore.append(y)
-                if c1[y] == c3[y] and c2[y] == c4[y]:  # se for um faça o teste irá apontar para onde o faça aponta
-                    c2[x] = c2[y] - len(set(ignore))
-                    if len(ignore)>0:
-                        if c2[y] <= min(ignore):
-                            c2[x] = c2[y]
-        y = c4[x] - 1  # ve para onde o campo de false está apontando
-        while c3[x] == 'None':  # se o código se deparar com um teste ele irá verificar a próxima linha de comando
-            if c3[y] == 'None':  # se a próxima linha de comando for outro teste ele irá a ignorar e ver para onde ela aponta
-                if x < y:
-                    ignore.append(y)
-                y = c4[y] - 1
-                c4[x] = c4[y]-len(set(ignore))  # o teste original irá apontar para onde apontava o teste final
-            else:
-                c3[x] = c3[y]  # e fazer a função que ele fazia
-                if x < y:
-                    ignore.append(y)
-                if c1[y] == c3[y] and c2[y] == c4[y]:  # se for um faça o teste irá apontar para onde o faça aponta
-                    c4[x] = c4[y] - len(set(ignore))
-                    if len(ignore)>0:
-                        if c4[y] <= min(ignore):
-                            c4[x] = c4[y]
+            seq.append(c2[x] - 1)
+        c1, c2, ignore = ifVerification(x, c1, c2, c3, c4, ignore) # verificação do campo true
+        c3, c4, ignore =ifVerification(x, c3, c4, c1, c2, ignore) # verificação do campo false
         x += 1
     if max(seq) >= len(c1) or -1 in seq:  # caso haja um teste que aponte para uma parada adiciona uma parada ao código
         c1.append('parada')
