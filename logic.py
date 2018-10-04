@@ -19,6 +19,23 @@ def translation(line_p):
         print(newline_p)
         return newline_p
 
+def numCorrection(array,n):
+    '''Recebe um array de comandos e corrige o número de suas instruções'''
+    for i, line in enumerate(array):
+        # procura as posições dos dois parâmetros
+        p1 = line.find(')') - 1
+        p2 = p1 + 2 + line[p1+2:].find(')') - 1
+        s = list(line)
+        print(p1,p2)
+        s[0] = str(int(s[0]) + n)
+        # verifica se a instrução não leva para uma parada (0) ou para um ciclo (c)
+        if(s[p1] != '0' and p1 != 'c'):
+            s[p1] = str(int(s[p1]) + n)
+        if(s[p2] != '0' and p2 != 'c'):
+            s[p2] = str(int(s[p2]) + n)
+        array[i] = "".join(s)
+    return array
+
 def paramNumber(position, line):
     '''Verifica de quantos dígitos é o número do parâmetro'''
     param = ''

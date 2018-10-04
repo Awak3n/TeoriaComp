@@ -7,22 +7,24 @@ except:
     print("Este programa requer Python 3.x e a biblioteca Python-Tk")
     exit(0)
 
-#Classe principal
 class Application():
+	'''Classe principal'''
 
-	#Construtor da classe, recebe a janela como parâmetro
 	def __init__(self, root):
+		'''Construtor da classe, recebe a janela como parâmetro'''
 		self.initComponents()
 		
 	def initComponents(self):
 		'''Inicizalização dos componentes principais da janela'''
-		root.title("Comparador de Programas 2000")	
+		root.title("Comparador de Programas 2000")
 		Label(root,text="Comparador de Programas Monolíticos",font=('Times',30)).grid(row=0,column=0,columnspan=2,sticky=W+E)
 		Label(root,text="Insira dois programa monolíticos no formato de instruções rolutadas \n e pressione prosseguir para compará-los.").grid(row=1,column=0,columnspan=2,sticky=W+E)
 		self.ltb = Text(root,width = 40, height = 20)
-		self.ltb.grid(row=2,column=0,sticky=E)
+		self.ltb.grid(row=2, column=0, sticky=E)
+		self.ltb.insert("1.0","Faça a para 0")
 		self.rtb = Text(root,width = 40, height = 20)
 		self.rtb.grid(row=2,column=1,sticky=E)
+		self.rtb.insert("1.0","Faça b para 0")
 		self.btn = Button(root, text="Prosseguir")
 		self.btn.bind("<Button-1>",self.action_n1)
 		self.btn.grid(row=3,column=0,columnspan=2,sticky=N)
@@ -34,12 +36,10 @@ class Application():
 		if(self.line_p1 is "" or self.line_p2 is ""):
 			messagebox.showinfo(icon="error",title='Erro',message="Um dos programas está vazio.")
 		else:
-			print("Primeiro programa:\n" + self.line_p1)
 			self.line_p1c = logic.translation(self.line_p1)
-			print("Segundo programa:\n" + self.line_p2)
 			self.line_p2c = logic.translation(self.line_p2)
 			if (len(self.line_p1c) != 0 or len(self.line_p2c) != 0):
-				print("yay")
+				self.line_p2c = logic.numCorrection(self.line_p2c,len(self.line_p1c))
 				self.btn.unbind_all
 				self.btn.bind("<Button-1>", self.action_n2)
 				self.ltb.delete('1.0','end')
