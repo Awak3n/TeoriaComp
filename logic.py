@@ -26,21 +26,6 @@ def numCorrection(array,n):
             array[2 + (i * 5)] = int(array[2 + (i * 5)] + n/5)
         if (array[3 + (i * 5)] is not 'parada' or 'ciclo'):
             array[4 + (i * 5)] = int(array[4 + (i * 5)] + n/5)
-    '''
-    for i, line in enumerate(array):
-        # procura as posições dos dois parâmetros
-        p1 = line.find(')') - 1
-        p2 = p1 + 2 + line[p1+2:].find(')') - 1
-        s = list(line)
-        print(p1,p2)
-        s[0] = str(int(s[0]) + n)
-        # verifica se a instrução não leva para uma parada (0) ou para um ciclo (c)
-        if(s[p1] != '0' and p1 != 'c'):
-            s[p1] = str(int(s[p1]) + n)
-        if(s[p2] != '0' and p2 != 'c'):
-            s[p2] = str(int(s[p2]) + n)
-        array[i] = "".join(s)
-    '''
     return array
 
 def paramNumber(position, line):
