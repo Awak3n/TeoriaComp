@@ -33,35 +33,29 @@ class Application():
 
 	def action_n1(self,event):    
 		'''Conversão dos programas para o formato composto'''
-		self.line_p1 = self.ltb.get('1.0', 'end-1c')
-		self.line_p2 = self.rtb.get('1.0', 'end-1c')
-		if(self.line_p1 is "" or self.line_p2 is ""):
+		line_p1 = self.ltb.get('1.0', 'end-1c')
+		line_p2 = self.rtb.get('1.0', 'end-1c')
+		if(len(line_p1) == 0 or len(line_p2) == 0):
 			messagebox.showinfo(icon="error",title='Erro',message="Um dos programas está vazio.")
 		else:
-			self.line_p1c = logic.translation(self.line_p1)
-			self.line_p2c = logic.translation(self.line_p2)
+			self.line_p1c = logic.translation(line_p1)
+			self.line_p2c = logic.translation(line_p2)
 			if (len(self.line_p1c) != 0 or len(self.line_p2c) != 0):
 				self.line_p2c = logic.numCorrection(self.line_p2c,len(self.line_p1c))
 				self.btn.unbind_all
 				self.btn.bind("<Button-1>", self.action_n2)
 				self.ltb.delete('1.0','end')
-				self.ltb.insert('1.0', self.textFormat(self.line_p1c))
+				self.ltb.insert('1.0', logic.textFormat(self.line_p1c))
 				self.ltb.configure(state=DISABLED)
 				self.rtb.delete('1.0','end')
-				self.rtb.insert('1.0', self.textFormat(self.line_p2c))
+				self.rtb.insert('1.0', logic.textFormat(self.line_p2c))
 				self.rtb.configure(state=DISABLED)
-				self.btn.focus_get
 				
 				
 	def action_n2(self,event):
 		'''Comparação do programa'''
 		print("nada aqui meu")
 
-	def textFormat(self,array):
-		text = ''
-		for line in array:
-			text += line + '\n'
-		return text
 
 #inicialização do programa
 if __name__ == '__main__':

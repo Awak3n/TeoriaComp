@@ -12,7 +12,6 @@ def translation(line_p):
     if (line_count == 1):
         messagebox.showinfo(icon="error",title='Erro',message="Programa vazio.")
     else:
-        #newline_p = newline_p[:-1]
         print("new= ")
         print(newline_p)
         newline_p = conversion(newline_p)
@@ -21,6 +20,13 @@ def translation(line_p):
 
 def numCorrection(array,n):
     '''Recebe um array de comandos e corrige o número de suas instruções'''
+    for i in range(0, int(len(array)/5)):
+        array[0 + (i * 5)] = int(array[0 + (i * 5)] + n/5)
+        if (array[1 + (i * 5)] is not 'parada' or 'ciclo'):
+            array[2 + (i * 5)] = int(array[2 + (i * 5)] + n/5)
+        if (array[3 + (i * 5)] is not 'parada' or 'ciclo'):
+            array[4 + (i * 5)] = int(array[4 + (i * 5)] + n/5)
+    '''
     for i, line in enumerate(array):
         # procura as posições dos dois parâmetros
         p1 = line.find(')') - 1
@@ -34,6 +40,7 @@ def numCorrection(array,n):
         if(s[p2] != '0' and p2 != 'c'):
             s[p2] = str(int(s[p2]) + n)
         array[i] = "".join(s)
+    '''
     return array
 
 def paramNumber(position, line):
@@ -171,6 +178,18 @@ def formatt(c1, c2, c3, c4, seq):
             c2[x] = 0
         if c4[x] < 0 and c3[x] == 'parada':
             c4[x] = 0
-        aux.append("%i: (%s,%i),(%s,%i)" % (id_f, c1[x], c2[x], c3[x], c4[x]))
+        aux.append(id_f)
+        aux.append(c1[x])
+        aux.append(c2[x])
+        aux.append(c3[x])
+        aux.append(c4[x])
+        #aux.append("%i: (%s,%i),(%s,%i)" % (id_f, c1[x], c2[x], c3[x], c4[x]))
         id_f += 1
+    return aux
+
+def textFormat(array):
+    '''Transforma o array em uma string para ser exibida'''
+    aux = ''
+    for i in range(0, int(len(array)/5)):
+        aux+=("{0}: ({1},{2}),({3},{4})\n".format(array[0 + (5 * i)], array[1 + (5 * i)], array[2 + (5 * i)], array[3 + (5 * i)], array[4 + (5 * i)]))
     return aux
