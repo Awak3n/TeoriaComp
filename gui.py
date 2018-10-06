@@ -1,8 +1,10 @@
 try:
+	import os
 	import logic
 	from tkinter import *
 	from tkinter import ttk
 	from tkinter import messagebox
+	from tkinter import filedialog
 except:
     print("Este programa requer Python 3.x e a biblioteca Python-Tk")
     exit(0)
@@ -13,6 +15,7 @@ class Application():
 	def __init__(self, root):
 		'''Construtor da classe, recebe a janela como parâmetro'''
 		self.initComponents()
+		self.initMenu()
 		
 	def initComponents(self):
 		'''Inicizalização dos componentes principais da janela'''
@@ -25,21 +28,43 @@ class Application():
 		self.lbl.grid(row=3, column=0,columnspan=2)
 		self.ltb = Text(root,width = 40, height = 20)
 		self.ltb.grid(row=4, column=0, sticky=E)
-		#self.ltb.insert("1.0","Faça a para 0")
-		self.ltb.insert("1.0", "Se t1 vá_para 2 senão vá_para 0\nSe t2 vá_para 0 senão vá_para 3\nFaça V vá_para 4\nFaça W vá_para 2")
+		#self.ltb.insert("1.0", "Se t1 vá_para 2 senão vá_para 0\nSe t2 vá_para 0 senão vá_para 3\nFaça V vá_para 4\nFaça W vá_para 2")
 		self.rtb = Text(root,width = 40, height = 20)
 		self.rtb.grid(row=4, column=1, sticky=E)
-		#self.rtb.insert("1.0","Faça b para 0")
-		self.rtb.insert("1.0","Se t1 vá_para 2 senão vá_para 0\nSe t2 vá_para 3 senão vá_para 0\nSe t3 vá_para 0 senão vá_para 4\nFaça V vá_para 5\nFaça W vá_para 3")
+		#self.rtb.insert("1.0","Se t1 vá_para 2 senão vá_para 0\nSe t2 vá_para 3 senão vá_para 0\nSe t3 vá_para 0 senão vá_para 4\nFaça V vá_para 5\nFaça W vá_para 3")
 		self.btn = Button(root, text="Prosseguir")
 		self.btn.bind("<Button-1>",self.action_n1)
 		self.btn.grid(row=5,column=1,sticky=N)
 		self.retbtn = Button(root, text="Retroceder", state=DISABLED)
 		self.retbtn.bind("<Button-1>",self.retaction_n1)
 		self.retbtn.grid(row=5,column=0,sticky=N)
+	
+	def initMenu(self):
+		menu = Menu(root)
+		file = Menu(menu, tearoff=0)
+		file.add_command(label="Abrir programas", command=self.loadProgram)
+		file.add_command(label="Sair", command=root.quit)
+		menu.add_cascade(label="Arquivo", menu=file)
+		menu.add_command(label="Sobre",command=self.showInfo)
+		root.config(menu=menu)
+
+	def showInfo(self):
+		messagebox.showinfo(icon="info",title='Sobre',message="Comparador de programas monolíticos feito por:\n#Êndril Castilho da Silveira\n#Leonardo Pellegrini Silva\n\nMatrícula: 78122 e 78159")
+
+	def loadProgram(self):
+		'''Carrega os programas do disco'''
+		try:
+			messagebox.showinfo(icon="info",title='Abrir',message="Selecione o arquivo do primeiro programa.")
+			p1 = open(filedialog.askopenfilename(title="Programa 1"),'r')
+			self.ltb.insert('1.0', p1.read())
+			messagebox.showinfo(icon="info",title='Abrir',message="Selecione o arquivo do segundo programa.")
+			p2 = open(filedialog.askopenfilename(title="Programa 2"),'r')
+			self.rtb.insert('1.0', p2.read())
+		except:
+			messagebox.showinfo(icon="error",title='Erro',message="Formato de arquivo inválido.")
 
 	def action_n1(self,event):    
-		'''Conversão dos programas para o formato composto'''
+		'''Passo 1 - Conversão dos programas para o formato composto'''
 		self.line_p1 = self.ltb.get('1.0', 'end-1c')
 		self.line_p2 = self.rtb.get('1.0', 'end-1c')
 		if(len(self.line_p1) == 0 or len(self.line_p2) == 0):
@@ -62,7 +87,6 @@ class Application():
 				self.lbl.configure(text=self.ltxt[1])
 			except:
 				messagebox.showinfo(icon="warning",title='Aviso',message="Por favor, preencha os campos corretamente.")
-			
 				
 	def retaction_n1(self,event):
 		'''Retrocede o estado do programa para o passo 1'''
@@ -78,11 +102,11 @@ class Application():
 		self.lbl.configure(text=self.ltxt[0])
 		
 	def action_n2(self,event):
-		'''Comparação do programa'''
+		'''Passo 2 - Comparação do programa'''
 		print("nada aqui meu")
 
 	def retaction_n2(self,event):
-    	'''Retrocede o estado o programa para o passo 2'''
+		'''Retrocede o estado o programa para o passo 2'''
 		print("nada aqui também")
 
 
