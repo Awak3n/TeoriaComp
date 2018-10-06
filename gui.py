@@ -49,7 +49,7 @@ class Application():
 		root.config(menu=menu)
 
 	def showInfo(self):
-		messagebox.showinfo(icon="info",title='Sobre',message="Comparador de programas monolíticos feito por:\n#Êndril Castilho da Silveira\n#Leonardo Pellegrini Silva\n\nMatrícula: 78122 e 78159")
+		messagebox.showinfo(icon="info",title='Sobre',message="Comparador de programas monolíticos feito por:\n#Êndril Castilho da Silveira\n#Leonardo Pellegrini Silva\n\nMatrícula: 78226 e 78159")
 
 	def loadProgram(self):
 		'''Carrega os programas do disco'''
