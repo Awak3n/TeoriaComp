@@ -54,12 +54,12 @@ class Application():
 	def loadProgram(self):
 		'''Carrega os programas do disco'''
 		try:
-			backInBlack
 			messagebox.showinfo(icon="info",title='Abrir',message="Selecione o arquivo do primeiro programa.")
 			p1 = open(filedialog.askopenfilename(title="Programa 1"),'r')
-			self.ltb.insert('1.0', p1.read())
 			messagebox.showinfo(icon="info",title='Abrir',message="Selecione o arquivo do segundo programa.")
-			p2 = open(filedialog.askopenfilename(title="Programa 2"),'r')
+			p2 = open(filedialog.askopenfilename(title="Programa 2"), 'r')
+			self.backInBlack()
+			self.ltb.insert('1.0', p1.read())
 			self.rtb.insert('1.0', p2.read())
 		except:
 			messagebox.showinfo(icon="error",title='Erro',message="Formato de arquivo inválido.")
