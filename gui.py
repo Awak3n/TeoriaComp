@@ -77,10 +77,13 @@ class Application():
 		self.retbtn.configure(state=DISABLED)
 		self.lbl.configure(text=self.ltxt[0])
 		
-
 	def action_n2(self,event):
 		'''Comparação do programa'''
 		print("nada aqui meu")
+
+	def retaction_n2(self,event):
+    	'''Retrocede o estado o programa para o passo 2'''
+		print("nada aqui também")
 
 
 #inicialização do programa
