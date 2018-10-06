@@ -1,10 +1,9 @@
 #!/bin/bash
 
-git add .
 echo commit message:
 read var
-git commit -m $var
-git checkout master
+git add .
+git commit -m "$var"
 git pull
 git checkout dev
 git merge dev master
