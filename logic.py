@@ -142,12 +142,15 @@ def translate(c1, c2, c3, c4):
         if c1[x] == c3[x] and c2[x] == c4[x]:  # sempre que houver uma função faça a linha de comando apontada pelo faça é garantida na tradução
             y = c2[x] - 1
             seq.append(y)
-            if c1[y] == c3[y] and c2[y] == c4[y]:
-                dicionario[y] = len(seq)+1
+            try:
+                if c1[y] == c3[y] and c2[y] == c4[y]:
+                    dicionario[y] = len(seq)+1
+            except:
+                pass
         c1, c2, ignore = ifVerification(x, c1, c2, c3, c4, ignore) # verificação do campo true
         c3, c4, ignore =ifVerification(x, c3, c4, c1, c2, ignore) # verificação do campo false
         x += 1
-    if max(seq) >= len(c1) or -1 in seq:  # caso haja um teste que aponte para uma parada adiciona uma parada ao código
+    if max(seq) >= len(c1) or -1 in seq or len(c1) in dicionario.values():  # caso haja um teste que aponte para uma parada adiciona uma parada ao código
         c1.append('parada')
         c2.append(0)
         c3.append('parada')
