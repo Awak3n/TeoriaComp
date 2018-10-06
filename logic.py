@@ -22,9 +22,13 @@ def numCorrection(array,n):
     '''Recebe um array de comandos e corrige o número de suas instruções'''
     for i in range(0, int(len(array)/5)):
         array[0 + (i * 5)] = int(array[0 + (i * 5)] + n/5)
-        if (array[1 + (i * 5)] is not 'parada' or 'ciclo'):
+        if array[1 + (i * 5)] is 'parada':
+            array[2 + (i * 5)] = 0
+        elif (array[1 + (i * 5)] is not 'ciclo'):
             array[2 + (i * 5)] = int(array[2 + (i * 5)] + n/5)
-        if (array[3 + (i * 5)] is not 'parada' or 'ciclo'):
+        if array[3 + (i * 5)] is 'parada':
+            array[4 + (i * 5)] = 0
+        elif (array[3 + (i * 5)] is not 'parada' or 'ciclo'):
             array[4 + (i * 5)] = int(array[4 + (i * 5)] + n/5)
     return array
 
