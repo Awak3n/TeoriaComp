@@ -2,10 +2,11 @@
 
 echo commit message:
 read var
-git add .
-git commit -m "$var"
+git checkout master
 git pull
 git checkout dev
+git add .
+git commit -m "$var"
 git merge dev master
 git checkout master
 git merge master dev
