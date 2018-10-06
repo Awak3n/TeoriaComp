@@ -10,7 +10,8 @@ def translation(line_p):
             newline_p.append("%i: %s" % (line_count, line))
             line_count += 1
     if (line_count == 1):
-        messagebox.showinfo(icon="error",title='Erro',message="Programa vazio.")
+        messagebox.showinfo(icon="error", title='Erro', message="Programa vazio.")
+        return
     else:
         print("new= ")
         print(newline_p)
@@ -83,7 +84,8 @@ def conversion(lines):
                 # print(param1)
                 # print(param2)
             except:
-                messagebox.showinfo(icon="error",title='Erro',message="Programa inválido.")
+                messagebox.showinfo(icon="error", title='Erro', message="Programa inválido.")
+                return
         else:
             # se for um Faça...
             if 'faça' in line:
@@ -104,9 +106,11 @@ def conversion(lines):
                     # print(param1)
                     # print(param2)
                 except:
-                    messagebox.showinfo(icon="error",title='Erro',message="Programa inválido.")
+                    messagebox.showinfo(icon="error", title='Erro', message="Programa inválido.")
+                    return
             else:
-                messagebox.showinfo(icon="error",title='Erro',message="Programa inválido.")
+                messagebox.showinfo(icon="error", title='Erro', message="Programa inválido.")
+                return
         # TODO: implementar o metodo que substitui os 'Nones' pela função que é executada
         line_count += 1  # conta a linha atual
     opc1, lc1, opc2, lc2, ignore = translate(opc1, lc1, opc2, lc2)
@@ -172,12 +176,11 @@ def formatt(c1, c2, c3, c4, seq):
         aux.append(c2[x])
         aux.append(c3[x])
         aux.append(c4[x])
-        #aux.append("%i: (%s,%i),(%s,%i)" % (id_f, c1[x], c2[x], c3[x], c4[x]))
         id_f += 1
     return aux
 
 def textFormat(array):
-    '''Transforma o array em uma string para ser exibida'''
+    '''Transforma o array em uma string para ser exibido'''
     aux = ''
     for i in range(0, int(len(array)/5)):
         aux+=("{0}: ({1},{2}),({3},{4})\n".format(array[0 + (5 * i)], array[1 + (5 * i)], array[2 + (5 * i)], array[3 + (5 * i)], array[4 + (5 * i)]))
