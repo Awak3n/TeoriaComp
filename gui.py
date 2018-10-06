@@ -54,6 +54,7 @@ class Application():
 	def loadProgram(self):
 		'''Carrega os programas do disco'''
 		try:
+			backInBlack
 			messagebox.showinfo(icon="info",title='Abrir',message="Selecione o arquivo do primeiro programa.")
 			p1 = open(filedialog.askopenfilename(title="Programa 1"),'r')
 			self.ltb.insert('1.0', p1.read())
@@ -62,6 +63,18 @@ class Application():
 			self.rtb.insert('1.0', p2.read())
 		except:
 			messagebox.showinfo(icon="error",title='Erro',message="Formato de arquivo inválido.")
+
+	def backInBlack(self):
+		'''Retorna para o estado inicial do programa'''
+		self.btn.unbind_all
+		self.btn.bind("<Button-1>", self.action_n1)
+		self.ltb.configure(state=NORMAL)
+		self.ltb.delete('1.0','end')
+		self.rtb.configure(state=NORMAL)
+		self.rtb.delete('1.0', 'end')
+		self.retbtn.unbind_all
+		self.retbtn.configure(state=DISABLED)
+		self.lbl.configure(text=self.ltxt[0])
 
 	def action_n1(self,event):    
 		'''Passo 1 - Conversão dos programas para o formato composto'''
@@ -84,6 +97,7 @@ class Application():
 				self.rtb.insert('1.0', logic.textFormat(self.line_p2c))
 				self.rtb.configure(state=DISABLED)
 				self.retbtn.configure(state=NORMAL)
+				self.retbtn.bind("<Button-1>",self.retaction_n1)
 				self.lbl.configure(text=self.ltxt[1])
 			except:
 				messagebox.showinfo(icon="warning",title='Aviso',message="Por favor, preencha os campos corretamente.")
@@ -98,6 +112,7 @@ class Application():
 		self.rtb.configure(state=NORMAL)
 		self.rtb.delete('1.0','end')
 		self.rtb.insert('1.0', self.line_p2)
+		self.retbtn.unbind_all
 		self.retbtn.configure(state=DISABLED)
 		self.lbl.configure(text=self.ltxt[0])
 		
