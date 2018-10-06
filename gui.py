@@ -29,17 +29,19 @@ class Application():
 		#self.rtb.insert("1.0","Se t1 vá_para 2 senão vá_para 0\nSe t2 vá_para 0 senão vá_para 3\nFaça V vá_para 4\nFaça W vá_para 3")
 		self.btn = Button(root, text="Prosseguir")
 		self.btn.bind("<Button-1>",self.action_n1)
-		self.btn.grid(row=3,column=0,columnspan=2,sticky=N)
+		self.btn.grid(row=3,column=1,sticky=N)
+		self.retbtn = Button(root, text="Retroceder", state=DISABLED)
+		self.retbtn.grid(row=3,column=0,sticky=N)
 
 	def action_n1(self,event):    
 		'''Conversão dos programas para o formato composto'''
-		line_p1 = self.ltb.get('1.0', 'end-1c')
-		line_p2 = self.rtb.get('1.0', 'end-1c')
-		if(len(line_p1) == 0 or len(line_p2) == 0):
+		self.line_p1 = self.ltb.get('1.0', 'end-1c')
+		self.line_p2 = self.rtb.get('1.0', 'end-1c')
+		if(len(self.line_p1) == 0 or len(self.line_p2) == 0):
 			messagebox.showinfo(icon="error",title='Erro',message="Um dos programas está vazio.")
 		else:
-			self.line_p1c = logic.translation(line_p1)
-			self.line_p2c = logic.translation(line_p2)
+			self.line_p1c = logic.translation(self.line_p1)
+			self.line_p2c = logic.translation(self.line_p2)
 			if (len(self.line_p1c) != 0 or len(self.line_p2c) != 0):
 				self.line_p2c = logic.numCorrection(self.line_p2c,len(self.line_p1c))
 				self.btn.unbind_all
@@ -51,7 +53,9 @@ class Application():
 				self.rtb.insert('1.0', logic.textFormat(self.line_p2c))
 				self.rtb.configure(state=DISABLED)
 				
-				
+	def retaction_n1(self,event):
+    	'''Retrocede o estado do programa para o passo 1'''
+
 	def action_n2(self,event):
 		'''Comparação do programa'''
 		print("nada aqui meu")
