@@ -109,11 +109,11 @@ def conversion(lines):
                 messagebox.showinfo(icon="error",title='Erro',message="Programa inválido.")
         # TODO: implementar o metodo que substitui os 'Nones' pela função que é executada
         line_count += 1  # conta a linha atual
-    opc1, lc1, opc2, lc2, ignore = translate(opc1, lc1, opc2, lc2)
-    return formatt(opc1,lc1,opc2,lc2,ignore)
+    opc1, lc1, opc2, lc2, ignore, dicionario = translate(opc1, lc1, opc2, lc2)
+    return formatt(opc1,lc1,opc2,lc2,ignore, dicionario)
 
 def ifVerification(x, ca, cb, cc, cd, ignore):
-    '''Verificação das instruções se'''
+    '''Cria o diagrama de fluxo em forma de texto de cada instrução'''
     y = cb[x] - 1  # ve para onde o campo está apontando
     while ca[x] == 'None':  # se o código se deparar com um teste ele irá verificar a próxima linha de comando
         if ca[y] == 'None':  # se a próxima linha de comando for outro teste ele irá a ignorar e ver para onde ela aponta
@@ -134,13 +134,16 @@ def ifVerification(x, ca, cb, cc, cd, ignore):
 
 def translate(c1, c2, c3, c4):
     """Função que traduz de simples para composto"""
-    # boa parte da função serve para criar um modelo de texto do fluxograma
     ignore = []  # conjunto de linhas desnecessárias no programa composto
     seq = [0]  # lista de linhas necessárias no programa composto, o primeiro sempre é traduzido
+    dicionario = {}
     x = 0
     while x < len(c1):  # enquanto ainda tiver codigo para traduzir
-        if c1[x] == c3[x] and c2[x] == c4[x]:  # sempre que houver uma função faça a proxima linha de comando é garantida na tradução
-            seq.append(c2[x] - 1)
+        if c1[x] == c3[x] and c2[x] == c4[x]:  # sempre que houver uma função faça a linha de comando apontada pelo faça é garantida na tradução
+            y = c2[x] - 1
+            seq.append(y)
+            if c1[y] == c3[y] and c2[y] == c4[y]:
+                dicionario[y] = len(seq)+1
         c1, c2, ignore = ifVerification(x, c1, c2, c3, c4, ignore) # verificação do campo true
         c3, c4, ignore =ifVerification(x, c3, c4, c1, c2, ignore) # verificação do campo false
         x += 1
@@ -152,9 +155,9 @@ def translate(c1, c2, c3, c4):
         if -1 in seq:  # caso haja um parada direto para 0 redefine para o final
             seq.remove(-1)
             seq.append(x)
-    return c1, c2, c3, c4, seq
+    return c1, c2, c3, c4, seq, dicionario
 
-def formatt(c1, c2, c3, c4, seq):
+def formatt(c1, c2, c3, c4, seq, dicionario):
     """Função que formata o texto da função composta"""
     aux = []
     id_f = 1
@@ -163,15 +166,22 @@ def formatt(c1, c2, c3, c4, seq):
             c2[x] = len(seq)
         if c4[x] <= 0 and c3[x] != 'parada':
             c4[x] = len(seq)
-        if c2[x] < 0 and c1[x] == 'parada':  # formaliza as paradas em 0
+        if c2[x] < len(c1) and c1[x] == 'parada':  # formaliza as paradas em 0
             c2[x] = 0
-        if c4[x] < 0 and c3[x] == 'parada':
+        if c4[x] < len(c1) and c3[x] == 'parada':
             c4[x] = 0
-        aux.append(id_f)
-        aux.append(c1[x])
-        aux.append(c2[x])
-        aux.append(c3[x])
-        aux.append(c4[x])
+        if x in dicionario.keys():
+            aux.append(id_f)
+            aux.append(c1[x])
+            aux.append(dicionario[x])
+            aux.append(c3[x])
+            aux.append(dicionario[x])
+        else:
+            aux.append(id_f)
+            aux.append(c1[x])
+            aux.append(c2[x])
+            aux.append(c3[x])
+            aux.append(c4[x])
         #aux.append("%i: (%s,%i),(%s,%i)" % (id_f, c1[x], c2[x], c3[x], c4[x]))
         id_f += 1
     return aux
