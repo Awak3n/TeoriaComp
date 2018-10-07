@@ -112,18 +112,23 @@ def ifVerification(x, ca, cb, cc, cd, ignore):
     y = cb[x] - 1  # ve para onde o campo está apontando
     while ca[x] == 'None':  # se o código se deparar com um teste ele irá verificar a próxima linha de comando
         if ca[y] == 'None':  # se a próxima linha de comando for outro teste ele irá a ignorar e ver para onde ela aponta
-            if x < y and y != 1:
+            if x < y:
                 ignore.append(y)
             y = cb[y] - 1
             cb[x] = cb[y]-len(set(ignore))  # o teste original irá apontar para onde apontava o teste final
         else:
             ca[x] = ca[y]  # e fazer a função que ele fazia
-            if x < y and y != 1:
+            if x < y:
                 ignore.append(y)
             if ca[y] == cc[y] and cb[y] == cd[y]:  # se for um faça o teste irá apontar para onde o faça aponta
                 cb[x] = cb[y] - len(set(ignore))
                 if len(ignore)>0:
-                    if cb[y] <= min(ignore):
+                    if min(ignore) == 1:
+                        copia = set(ignore)
+                        controle = list(copia)[1]
+                    else:
+                        controle = min(ignore)
+                    if cb[y] <= controle:
                         cb[x] = cb[y]
     return ca, cb, ignore
 

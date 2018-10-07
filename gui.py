@@ -151,11 +151,11 @@ class Application():
 		self.line_p2cs, test_p2 = logic.cycleSimplify(self.line_p2c, self.seq_p2)
 		self.ltb.configure(state=NORMAL)
 		self.ltb.delete('1.0','end')
-		self.ltb.insert('1.0', logic.textFormat(self.line_p1cs)+"\n"+self.showseq_p1)
+		self.ltb.insert('1.0', logic.textFormat(self.line_p1cs))
 		self.ltb.configure(state=DISABLED)
 		self.rtb.configure(state=NORMAL)
 		self.rtb.delete('1.0','end')
-		self.rtb.insert('1.0', logic.textFormat(self.line_p2cs)+"\n"+self.showseq_p2)
+		self.rtb.insert('1.0', logic.textFormat(self.line_p2cs))
 		self.rtb.configure(state=DISABLED)
 		self.btn.unbind_all
 		self.btn.bind("<Button-1>", self.action_n4)
@@ -201,11 +201,11 @@ class Application():
 		'''Retrocede o estado do programa para o passo 4'''
 		self.ltb.configure(state=NORMAL)
 		self.ltb.delete('1.0','end')
-		self.ltb.insert('1.0', logic.textFormat(self.line_p1cs)+"\n"+self.showseq_p1)
+		self.ltb.insert('1.0', logic.textFormat(self.line_p1cs))
 		self.ltb.configure(state=DISABLED)
 		self.rtb.configure(state=NORMAL)
 		self.rtb.delete('1.0','end')
-		self.rtb.insert('1.0', logic.textFormat(self.line_p2cs)+"\n"+self.showseq_p2)
+		self.rtb.insert('1.0', logic.textFormat(self.line_p2cs))
 		self.rtb.configure(state=DISABLED)
 		self.btn.unbind_all
 		self.btn.configure(state=NORMAL)
