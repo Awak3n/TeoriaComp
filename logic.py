@@ -136,15 +136,18 @@ def translate(c1, c2, c3, c4):
     while x < len(c1):  # enquanto ainda tiver codigo para traduzir
         if c1[x] == c3[x] and c2[x] == c4[x]:  # sempre que houver uma função faça a linha de comando apontada pelo faça é garantida na tradução
             y = c2[x] - 1
-            seq.append(y)
             try:
                 if c1[y] == c3[y] and c2[y] == c4[y]:
                     if y not in seq:
+                        seq.append(y)
                         dicionario[y] = len(seq) + 1
                     else:
+                        seq.append(y)
                         dicionario[y] = c2[y]
+                else:
+                    seq.append(y)
             except:
-                pass
+                seq.append(y)
         c1, c2, ignore = ifVerification(x, c1, c2, c3, c4, ignore) # verificação do campo true
         c3, c4, ignore = ifVerification(x, c3, c4, c1, c2, ignore) # verificação do campo false
         x += 1
