@@ -5,8 +5,8 @@ try:
 	from tkinter import messagebox
 	from tkinter import filedialog
 except:
-    print("Este programa requer Python 3.x e a biblioteca Python-Tk")
-    exit(0)
+	print("Este programa requer Python 3.x e a biblioteca Python-Tk")
+	exit(0)
 
 class Application():
 	'''Classe principal'''
@@ -22,7 +22,7 @@ class Application():
 		Label(root,text="Comparador de Programas Monolíticos",font=('Times',30)).grid(row=0,column=0,columnspan=2,sticky=W+E)
 		Label(root, text="Insira dois programas monolíticos no formato de instruções rolutadas \n e pressione prosseguir para compará-los.").grid(row=1, column=0, columnspan=2, sticky=W + E)
 		Label(root, text="Passo atual ", font=('Verdana', 20), fg="RED").grid(row=2, column=0, columnspan=2)
-		self.ltxt= ["0 - Inserção dos Programas","1 - Definição das Instruções Rotuladas Compostas","2 - Definição da Cadeida de Conjuntos Finitos ","3 - Simplificação de Ciclos","4 - Comparação dos Programas"]
+		self.ltxt= ["0 - Inserção dos Programas","1 - Definição das Instruções Rotuladas Compostas","2 - Definição da Cadeida de Conjuntos Finitos","3 - Simplificação de Ciclos","4 - Comparação dos Programas"]
 		self.lbl = Label(root,text=self.ltxt[0] , font=('Verdana',15), fg="RED")
 		self.lbl.grid(row=3, column=0,columnspan=2)
 		self.ltb = Text(root,width = 40, height = 20)
@@ -118,6 +118,9 @@ class Application():
 	def action_n2(self,event):
 		'''Passo 2 - Comparação do programa'''
 		print("agora tem coisa aqui")
+		fullseq_p1, seq_p1 = logic.finiteArrayDefinition(self.line_p1c, 0)
+		fullseq_p2, seq_p2 = logic.finiteArrayDefinition(self.line_p2c, int(len(self.line_p1c)/5))
+		
 
 	def retaction_n2(self,event):
 		'''Retrocede o estado o programa para o passo 2'''

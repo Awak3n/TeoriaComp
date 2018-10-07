@@ -22,11 +22,11 @@ def numCorrection(array,n):
         array[0 + (i * 5)] = int(array[0 + (i * 5)] + n/5)
         if array[1 + (i * 5)] is 'parada':
             array[2 + (i * 5)] = 0
-        elif (array[1 + (i * 5)] is not 'parada' or 'ciclo'):
+        elif (array[1 + (i * 5)] is not 'parada' or array[1 + (i * 5)] is not 'ciclo'):
             array[2 + (i * 5)] = int(array[2 + (i * 5)] + n/5)
         if array[3 + (i * 5)] is 'parada':
             array[4 + (i * 5)] = 0
-        elif (array[3 + (i * 5)] is not 'parada' or 'ciclo'):
+        elif (array[3 + (i * 5)] is not 'parada' or array[3 + (i * 5)] is not 'ciclo'):
             array[4 + (i * 5)] = int(array[4 + (i * 5)] + n/5)
     return array
 
@@ -181,8 +181,41 @@ def formatt(c1, c2, c3, c4, seq, dicionario):
         id_f += 1
     return aux
 
-def finiteArrayDefinition(array,n):
-    return
+def backCheck(x,last,n,array,seq,fullseq):
+    '''Checa recursivamente por alguma menção da instrução'''
+    temp = []
+    print(len(temp))
+    # need to add limit
+    for i in range(int(n + (len(array) / 5) -1),n+1,-1):
+        if (array[2 + (5 * (i - n))] in x or array[4 + (5 * (i - n))] in x):
+            seq.append(array[0 + (5 * (i - n))])
+            temp.append(array[0 + (5 * (i - n))])
+    if (len(seq) == last or len(temp) == 0):
+        return fullseq, seq
+    else:
+        fullseq.append(len(temp))
+        y = 0
+        for elem in temp:
+            # se alguma instrução já na está na sequência, não precisa ser verificada novamente
+            if (elem in seq):
+                temp.pop(y)
+            y += 1
+        print(seq)
+        fullseq,seq = backCheck(temp,last,n,array,seq,fullseq)
+
+def finiteArrayDefinition(array, n):
+    '''Define a Cadeida de Conjuntos Finitos'''
+    fullseq = []
+    seq = []
+    # encontra a última da parada
+    for i in range(int(n + (len(array) / 5)-1), n+1, -1):
+        print(i,n)
+        if (array[2 + (5 * (i - n))] == 0 or array[4 + (5 * (i - n))] == 0):
+            seq.append(array[0 + (5 * (i - n))])
+            last = array[0 + (5 * (i - n))]
+    # procura todas as menções à essa instrução e as anteriores
+    fullseq.append(len(seq))
+    return backCheck(seq,last,n,array,seq,fullseq)
 
 def textFormat(array):
     '''Transforma o array em uma string para ser exibida'''
