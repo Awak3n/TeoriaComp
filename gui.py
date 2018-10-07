@@ -1,5 +1,4 @@
 try:
-	import os
 	import logic
 	from tkinter import *
 	from tkinter import ttk
@@ -21,17 +20,17 @@ class Application():
 		'''Inicizalização dos componentes principais da janela'''
 		root.title("Comparador de Programas 2000")
 		Label(root,text="Comparador de Programas Monolíticos",font=('Times',30)).grid(row=0,column=0,columnspan=2,sticky=W+E)
-		Label(root, text="Insira dois programa monolíticos no formato de instruções rolutadas \n e pressione prosseguir para compará-los.").grid(row=1, column=0, columnspan=2, sticky=W + E)
+		Label(root, text="Insira dois programas monolíticos no formato de instruções rolutadas \n e pressione prosseguir para compará-los.").grid(row=1, column=0, columnspan=2, sticky=W + E)
 		Label(root, text="Passo atual ", font=('Verdana', 20), fg="RED").grid(row=2, column=0, columnspan=2)
 		self.ltxt= ["0 - Inserção dos Programas","1 - Definição das Instruções Rotuladas Compostas","2 - Definição da Cadeida de Conjuntos Finitos ","3 - Simplificação de Ciclos","4 - Comparação dos Programas"]
 		self.lbl = Label(root,text=self.ltxt[0] , font=('Verdana',15), fg="RED")
 		self.lbl.grid(row=3, column=0,columnspan=2)
 		self.ltb = Text(root,width = 40, height = 20)
 		self.ltb.grid(row=4, column=0, sticky=E)
-		#self.ltb.insert("1.0", "Se t1 vá_para 2 senão vá_para 0\nSe t2 vá_para 0 senão vá_para 3\nFaça V vá_para 4\nFaça W vá_para 2")
+		self.ltb.insert("1.0", "Se t1 vá_para 2 senão vá_para 0\nSe t2 vá_para 0 senão vá_para 3\nFaça V vá_para 4\nFaça W vá_para 2")
 		self.rtb = Text(root,width = 40, height = 20)
 		self.rtb.grid(row=4, column=1, sticky=E)
-		#self.rtb.insert("1.0","Se t1 vá_para 2 senão vá_para 0\nSe t2 vá_para 3 senão vá_para 0\nSe t3 vá_para 0 senão vá_para 4\nFaça V vá_para 5\nFaça W vá_para 3")
+		self.rtb.insert("1.0","Se t1 vá_para 2 senão vá_para 0\nSe t2 vá_para 3 senão vá_para 0\nSe t3 vá_para 0 senão vá_para 4\nFaça V vá_para 5\nFaça W vá_para 3")
 		self.btn = Button(root, text="Prosseguir")
 		self.btn.bind("<Button-1>",self.action_n1)
 		self.btn.grid(row=5,column=1,sticky=N)

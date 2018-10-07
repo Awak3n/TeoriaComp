@@ -10,21 +10,19 @@ def translation(line_p):
             newline_p.append("%i: %s" % (line_count, line))
             line_count += 1
     if (line_count == 1):
-        messagebox.showinfo(icon="error",title='Erro',message="Programa vazio.")
+        messagebox.showinfo(icon="error", title='Erro', message="Programa vazio.")
     else:
-        print("new= ")
-        print(newline_p)
         newline_p = conversion(newline_p)
         print(newline_p)
         return newline_p
 
 def numCorrection(array,n):
     '''Recebe um array de comandos e corrige o número de suas instruções'''
-    for i in range(0, int(len(array)/5)):
+    for i in range(0, int(len(array) / 5)):
         array[0 + (i * 5)] = int(array[0 + (i * 5)] + n/5)
         if array[1 + (i * 5)] is 'parada':
             array[2 + (i * 5)] = 0
-        elif (array[1 + (i * 5)] is not 'ciclo'):
+        elif (array[1 + (i * 5)] is not 'parada' or 'ciclo'):
             array[2 + (i * 5)] = int(array[2 + (i * 5)] + n/5)
         if array[3 + (i * 5)] is 'parada':
             array[4 + (i * 5)] = 0
@@ -80,10 +78,9 @@ def conversion(lines):
                     opc2.append("parada")
                 else:
                     opc2.append("None")  # mais tarde, 'None' serão substituidos
-                # print(param1)
-                # print(param2)
             except:
-                messagebox.showinfo(icon="error",title='Erro',message="Programa inválido.")
+                messagebox.showinfo(icon="error", title='Erro', message="Programa inválido.")
+                return
         else:
             # se for um Faça...
             if 'faça' in line:
@@ -101,13 +98,12 @@ def conversion(lines):
                     lc2.append(int(param2))
                     opc1.append(param1)
                     opc2.append(param1)
-                    # print(param1)
-                    # print(param2)
                 except:
                     messagebox.showinfo(icon="error",title='Erro',message="Programa inválido.")
+                    return
             else:
-                messagebox.showinfo(icon="error",title='Erro',message="Programa inválido.")
-        # TODO: implementar o metodo que substitui os 'Nones' pela função que é executada
+                messagebox.showinfo(icon="error", title='Erro', message="Programa inválido.")
+                return
         line_count += 1  # conta a linha atual
     opc1, lc1, opc2, lc2, ignore, dicionario = translate(opc1, lc1, opc2, lc2)
     return formatt(opc1,lc1,opc2,lc2,ignore, dicionario)
@@ -117,13 +113,13 @@ def ifVerification(x, ca, cb, cc, cd, ignore):
     y = cb[x] - 1  # ve para onde o campo está apontando
     while ca[x] == 'None':  # se o código se deparar com um teste ele irá verificar a próxima linha de comando
         if ca[y] == 'None':  # se a próxima linha de comando for outro teste ele irá a ignorar e ver para onde ela aponta
-            if x < y:
+            if x < y and y != 1:
                 ignore.append(y)
             y = cb[y] - 1
             cb[x] = cb[y]-len(set(ignore))  # o teste original irá apontar para onde apontava o teste final
         else:
             ca[x] = ca[y]  # e fazer a função que ele fazia
-            if x < y:
+            if x < y and y != 1:
                 ignore.append(y)
             if ca[y] == cc[y] and cb[y] == cd[y]:  # se for um faça o teste irá apontar para onde o faça aponta
                 cb[x] = cb[y] - len(set(ignore))
@@ -142,15 +138,12 @@ def translate(c1, c2, c3, c4):
         if c1[x] == c3[x] and c2[x] == c4[x]:  # sempre que houver uma função faça a linha de comando apontada pelo faça é garantida na tradução
             y = c2[x] - 1
             seq.append(y)
-            try:
-                if c1[y] == c3[y] and c2[y] == c4[y]:
-                    dicionario[y] = len(seq)+1
-            except:
-                pass
+            if c1[y] == c3[y] and c2[y] == c4[y]:
+                dicionario[y] = len(seq)+1
         c1, c2, ignore = ifVerification(x, c1, c2, c3, c4, ignore) # verificação do campo true
-        c3, c4, ignore =ifVerification(x, c3, c4, c1, c2, ignore) # verificação do campo false
+        c3, c4, ignore = ifVerification(x, c3, c4, c1, c2, ignore) # verificação do campo false
         x += 1
-    if max(seq) >= len(c1) or -1 in seq or len(c1) in dicionario.values():  # caso haja um teste que aponte para uma parada adiciona uma parada ao código
+    if max(seq) >= len(c1) or -1 in seq:  # caso haja um teste que aponte para uma parada adiciona uma parada ao código
         c1.append('parada')
         c2.append(0)
         c3.append('parada')
@@ -187,6 +180,9 @@ def formatt(c1, c2, c3, c4, seq, dicionario):
             aux.append(c4[x])
         id_f += 1
     return aux
+
+def finiteArrayDefinition(array,n):
+    return
 
 def textFormat(array):
     '''Transforma o array em uma string para ser exibida'''
