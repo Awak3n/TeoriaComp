@@ -189,6 +189,7 @@ def finiteArrayDefinition(array, n):
     # encontra a última da parada
     for i in range(int(n + (len(array) / 5)-1), n-1, -1):
         if (array[2 + (5 * (i - n))] == 0 or array[4 + (5 * (i - n))] == 0):
+            limit = array[0 + (5 * (i - n))]
             seq.append(array[0 + (5 * (i - n))])
             fullseq.extend(seq)
             break
@@ -196,7 +197,7 @@ def finiteArrayDefinition(array, n):
     x = 1
     while (x != 0):
         x = 0
-        for i in range(int(n + (len(array) / 5) - 1), n - 1, -1):
+        for i in range(limit - 1, n - 1, -1):
             # verifica se a intrução aponta para a instrução anterior e se ainda não foi inclusa na sequência
             if (array[0 + (5 * (i - n))] not in seq and (array[2 + (5 * (i - n))] in seq or array[4 + (5 * (i - n))] in seq)):
                 seq.append(array[0 + (5 * (i - n))])
