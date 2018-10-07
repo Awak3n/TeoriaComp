@@ -48,7 +48,7 @@ class Application():
 		root.config(menu=menu)
 
 	def showInfo(self):
-		messagebox.showinfo(icon="info",title='Sobre',message="Comparador de programas monolíticos feito por:\n#Êndril Castilho da Silveira\n#Leonardo Pellegrini Silva\n\nMatrícula: 78226 e 78159")
+		messagebox.showinfo(icon="info", title='Sobre', message="Comparador de programas monolíticos feito por:\n\n#Êndril Castilho da Silveira\n#Leonardo Pellegrini Silva\n\nMatrícula: 78226 e 78159")
 
 	def loadProgram(self):
 		'''Carrega os programas do disco'''
@@ -117,11 +117,12 @@ class Application():
 		
 	def action_n2(self,event):
 		'''Passo 2 - Comparação do programa'''
-		print("nada aqui meu")
+		print("agora tem coisa aqui")
 
 	def retaction_n2(self,event):
 		'''Retrocede o estado o programa para o passo 2'''
-		print("nada aqui também")
+		print("quer voltar é? não vai não troxa")
+		self.retbtn.configure(state=DISABLED)
 
 
 #inicialização do programa
