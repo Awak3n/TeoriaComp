@@ -53,10 +53,8 @@ class Application():
 	def loadProgram(self):
 		'''Carrega os programas do disco'''
 		try:
-			messagebox.showinfo(icon="info",title='Abrir',message="Selecione o arquivo do primeiro programa.")
 			p1 = open(filedialog.askopenfilename(title="Programa 1"),'r')
-			messagebox.showinfo(icon="info",title='Abrir',message="Selecione o arquivo do segundo programa.")
-			p2 = open(filedialog.askopenfilename(title="Programa 2"), 'r')
+			p2 = open(filedialog.askopenfilename(title="Programa 2"),'r')
 			self.backInBlack()
 			self.ltb.insert('1.0', p1.read())
 			self.rtb.insert('1.0', p2.read())
@@ -132,7 +130,7 @@ class Application():
 		self.lbl.configure(text=self.ltxt[2])
 		
 	def retaction_n2(self,event):
-		'''Retrocede o estado o programa para o passo 2'''
+		'''Retrocede o estado do programa para o passo 2'''
 		self.btn.unbind_all
 		self.btn.bind("<Button-1>", self.action_n2)
 		self.ltb.configure(state=NORMAL)
@@ -148,20 +146,73 @@ class Application():
 		self.lbl.configure(text=self.ltxt[1])
 
 	def action_n3(self,event):
-		'''Action 3'''
-		print("aqui não tem ninguém")
+		'''Passo 3 - Simplificação de Ciclos (se necessário)'''
+		self.line_p1cs, test_p1 = logic.cycleSimplify(self.line_p1c, self.seq_p1)
+		self.line_p2cs, test_p2 = logic.cycleSimplify(self.line_p2c, self.seq_p2)
+		self.ltb.configure(state=NORMAL)
+		self.ltb.delete('1.0','end')
+		self.ltb.insert('1.0', logic.textFormat(self.line_p1cs)+"\n"+self.showseq_p1)
+		self.ltb.configure(state=DISABLED)
+		self.rtb.configure(state=NORMAL)
+		self.rtb.delete('1.0','end')
+		self.rtb.insert('1.0', logic.textFormat(self.line_p2cs)+"\n"+self.showseq_p2)
+		self.rtb.configure(state=DISABLED)
+		self.btn.unbind_all
+		self.btn.bind("<Button-1>", self.action_n4)
+		self.retbtn.unbind_all
+		self.retbtn.bind("<Button-1>",self.retaction_n3)
+		self.lbl.configure(text=self.ltxt[3])
 
 	def retaction_n3(self,event):
-		'''Return action 3'''
-		print("não tem pão velho")
+		'''Retrocede o estado do programa para o passo 3'''
+		self.ltb.configure(state=NORMAL)
+		self.ltb.delete('1.0','end')
+		self.ltb.insert('1.0', logic.textFormat(self.line_p1c)+"\n"+self.showseq_p1)
+		self.ltb.configure(state=DISABLED)
+		self.rtb.configure(state=NORMAL)
+		self.rtb.delete('1.0','end')
+		self.rtb.insert('1.0', logic.textFormat(self.line_p2c)+"\n"+self.showseq_p2)
+		self.rtb.configure(state=DISABLED)
+		self.btn.unbind_all
+		self.btn.bind("<Button-1>", self.action_n3)
+		self.retbtn.unbind_all
+		self.retbtn.bind("<Button-1>",self.retaction_n2)
+		self.lbl.configure(text=self.ltxt[2])
+
 
 	def action_n4(self,event):
-		'''Action 3'''
-		print("nope")
+		'''Passo 4 - Comparação dos Programas'''
+
+		self.ltb.configure(state=NORMAL)
+		self.ltb.delete('1.0','end')
+		self.ltb.insert('1.0', logic.textFormat(self.line_p1cs)+logic.textFormat(self.line_p2cs))
+		self.ltb.configure(state=DISABLED)
+		self.rtb.configure(state=NORMAL)
+		self.rtb.delete('1.0','end')
+		# comparison logic
+		self.rtb.configure(state=DISABLED)
+		self.btn.unbind_all
+		self.btn.configure(state=DISABLED)
+		self.retbtn.unbind_all
+		self.retbtn.bind("<Button-1>",self.retaction_n4)
+		self.lbl.configure(text=self.ltxt[4])
 
 	def retaction_n4(self,event):
-		'''Return action 4'''
-		print("nada")
+		'''Retrocede o estado do programa para o passo 4'''
+		self.ltb.configure(state=NORMAL)
+		self.ltb.delete('1.0','end')
+		self.ltb.insert('1.0', logic.textFormat(self.line_p1cs)+"\n"+self.showseq_p1)
+		self.ltb.configure(state=DISABLED)
+		self.rtb.configure(state=NORMAL)
+		self.rtb.delete('1.0','end')
+		self.rtb.insert('1.0', logic.textFormat(self.line_p2cs)+"\n"+self.showseq_p2)
+		self.rtb.configure(state=DISABLED)
+		self.btn.unbind_all
+		self.btn.configure(state=NORMAL)
+		self.btn.bind("<Button-1>", self.action_n4)
+		self.retbtn.unbind_all
+		self.retbtn.bind("<Button-1>",self.retaction_n3)
+		self.lbl.configure(text=self.ltxt[3])
 
 #inicialização do programa
 if __name__ == '__main__':

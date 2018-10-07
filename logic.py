@@ -13,7 +13,6 @@ def translation(line_p):
         messagebox.showinfo(icon="error", title='Erro', message="Programa vazio.")
     else:
         newline_p = conversion(newline_p)
-        print(newline_p)
         return newline_p
 
 def numCorrection(array,n):
@@ -213,15 +212,23 @@ def showSeq(fullseq):
     while(i < len(fullseq)):
         seq = []
         if (fullseq[i] == 'e'):
-            count+=1
             seq.append(fullseq[i])
             i += 1
             while (i < len(fullseq) and fullseq[i] != 'e'):
                 seq.append(fullseq[i])
                 i += 1
-            aux += ("{0}: {1}\n".format(count, seq))
-    aux += ("{0}: {1}\n".format(count+1, seq))
+            aux += ("A{0}: {1}\n".format(count, seq))
+            count+=1
+    aux += ("A{0}: {1}\n".format(count, seq))
     return aux
+
+def cycleSimplify(array, seq):
+    '''Simplificação de Ciclos (caso seja necessário)'''
+    if (len(seq) != len(array)):
+        print("código aqui")
+        return array, 1
+    else:
+        return array, 0
 
 def textFormat(array):
     '''Transforma o array em uma string para ser exibida'''
