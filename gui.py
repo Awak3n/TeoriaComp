@@ -117,16 +117,51 @@ class Application():
 		
 	def action_n2(self,event):
 		'''Passo 2 - Comparação do programa'''
-		print("agora tem coisa aqui")
-		fullseq_p1, seq_p1 = logic.finiteArrayDefinition(self.line_p1c, 0)
-		fullseq_p2, seq_p2 = logic.finiteArrayDefinition(self.line_p2c, int(len(self.line_p1c)/5))
+		self.showseq_p1, self.seq_p1 = logic.finiteArrayDefinition(self.line_p1c, 0)
+		self.showseq_p2, self.seq_p2 = logic.finiteArrayDefinition(self.line_p2c, int(len(self.line_p1c) / 5))
+		self.btn.unbind_all
+		self.btn.bind("<Button-1>", self.action_n3)
+		self.ltb.configure(state=NORMAL)
+		self.ltb.insert('end', "\n"+self.showseq_p1)
+		self.ltb.configure(state=DISABLED)
+		self.rtb.configure(state=NORMAL)
+		self.rtb.insert('end', "\n"+self.showseq_p2)
+		self.rtb.configure(state=DISABLED)
+		self.retbtn.unbind_all
+		self.retbtn.bind("<Button-1>",self.retaction_n2)
+		self.lbl.configure(text=self.ltxt[2])
 		
-
 	def retaction_n2(self,event):
 		'''Retrocede o estado o programa para o passo 2'''
-		print("quer voltar é? não vai não troxa")
-		self.retbtn.configure(state=DISABLED)
+		self.btn.unbind_all
+		self.btn.bind("<Button-1>", self.action_n2)
+		self.ltb.configure(state=NORMAL)
+		self.ltb.delete('1.0','end')
+		self.ltb.insert('1.0', logic.textFormat(self.line_p1c))
+		self.ltb.configure(state=DISABLED)
+		self.rtb.configure(state=NORMAL)
+		self.rtb.delete('1.0','end')
+		self.rtb.insert('1.0', logic.textFormat(self.line_p2c))
+		self.rtb.configure(state=DISABLED)
+		self.retbtn.unbind_all
+		self.retbtn.bind("<Button-1>", self.retaction_n1)
+		self.lbl.configure(text=self.ltxt[1])
 
+	def action_n3(self,event):
+		'''Action 3'''
+		print("aqui não tem ninguém")
+
+	def retaction_n3(self,event):
+		'''Return action 3'''
+		print("não tem pão velho")
+
+	def action_n4(self,event):
+		'''Action 3'''
+		print("nope")
+
+	def retaction_n4(self,event):
+		'''Return action 4'''
+		print("nada")
 
 #inicialização do programa
 if __name__ == '__main__':

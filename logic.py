@@ -181,41 +181,46 @@ def formatt(c1, c2, c3, c4, seq, dicionario):
         id_f += 1
     return aux
 
-def backCheck(x,last,n,array,seq,fullseq):
-    '''Checa recursivamente por alguma menção da instrução'''
-    temp = []
-    print(len(temp))
-    # need to add limit
-    for i in range(int(n + (len(array) / 5) -1),n+1,-1):
-        if (array[2 + (5 * (i - n))] in x or array[4 + (5 * (i - n))] in x):
-            seq.append(array[0 + (5 * (i - n))])
-            temp.append(array[0 + (5 * (i - n))])
-    if (len(seq) == last or len(temp) == 0):
-        return fullseq, seq
-    else:
-        fullseq.append(len(temp))
-        y = 0
-        for elem in temp:
-            # se alguma instrução já na está na sequência, não precisa ser verificada novamente
-            if (elem in seq):
-                temp.pop(y)
-            y += 1
-        print(seq)
-        fullseq,seq = backCheck(temp,last,n,array,seq,fullseq)
-
 def finiteArrayDefinition(array, n):
     '''Define a Cadeida de Conjuntos Finitos'''
     fullseq = []
-    seq = []
+    seq = ['e']
+    fullseq.extend(seq)
     # encontra a última da parada
-    for i in range(int(n + (len(array) / 5)-1), n+1, -1):
-        print(i,n)
+    for i in range(int(n + (len(array) / 5)-1), n-1, -1):
         if (array[2 + (5 * (i - n))] == 0 or array[4 + (5 * (i - n))] == 0):
             seq.append(array[0 + (5 * (i - n))])
-            last = array[0 + (5 * (i - n))]
+            fullseq.extend(seq)
+            break
     # procura todas as menções à essa instrução e as anteriores
-    fullseq.append(len(seq))
-    return backCheck(seq,last,n,array,seq,fullseq)
+    x = 1
+    while (x != 0):
+        x = 0
+        for i in range(int(n + (len(array) / 5) - 1), n - 1, -1):
+            # verifica se a intrução aponta para a instrução anterior e se ainda não foi inclusa na sequência
+            if (array[0 + (5 * (i - n))] not in seq and (array[2 + (5 * (i - n))] in seq or array[4 + (5 * (i - n))] in seq)):
+                seq.append(array[0 + (5 * (i - n))])
+                fullseq.extend(seq)
+                x += 1
+    return showSeq(fullseq),seq
+
+def showSeq(fullseq):
+    '''Retorna a sequência de instruções formatada'''
+    aux = ''
+    count = 0
+    i = 0
+    while(i < len(fullseq)):
+        seq = []
+        if (fullseq[i] == 'e'):
+            count+=1
+            seq.append(fullseq[i])
+            i += 1
+            while (i < len(fullseq) and fullseq[i] != 'e'):
+                seq.append(fullseq[i])
+                i += 1
+            aux += ("{0}: {1}\n".format(count, seq))
+    aux += ("{0}: {1}\n".format(count+1, seq))
+    return aux
 
 def textFormat(array):
     '''Transforma o array em uma string para ser exibida'''
