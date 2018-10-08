@@ -110,12 +110,20 @@ def conversion(lines):
 def ifVerification(x, ca, cb, cc, cd, ignore):
     '''Cria o diagrama de fluxo em forma de texto de cada instrução'''
     y = cb[x] - 1  # ve para onde o campo está apontando
+    pilha_ciclo = []
     while ca[x] == 'None':  # se o código se deparar com um teste ele irá verificar a próxima linha de comando
+        pilha_ciclo.append(x)
         if ca[y] == 'None':  # se a próxima linha de comando for outro teste ele irá a ignorar e ver para onde ela aponta
             if x < y:
                 ignore.append(y)
             y = cb[y] - 1
             cb[x] = cb[y]-len(set(ignore))  # o teste original irá apontar para onde apontava o teste final
+            if y not in pilha_ciclo:
+                pilha_ciclo.append(y)
+            else:
+                ca[x] = "ciclo"
+                cb[x] = "w"
+                break
         else:
             ca[x] = ca[y]  # e fazer a função que ele fazia
             if x < y:
@@ -123,12 +131,12 @@ def ifVerification(x, ca, cb, cc, cd, ignore):
             if ca[y] == cc[y] and cb[y] == cd[y]:  # se for um faça o teste irá apontar para onde o faça aponta
                 cb[x] = cb[y] - len(set(ignore))
                 if len(ignore)>0:
-                    if min(ignore) == 1:
+                    if min(ignore) == 1:  # se a primeira instrução for um if ela precisa ser desconsiderada na hora de refazer visitas
                         copia = set(ignore)
                         controle = list(copia)[1]
                     else:
                         controle = min(ignore)
-                    if cb[y] <= controle:
+                    if cb[y] <= controle:  # corrige certos apontamentos
                         cb[x] = cb[y]
     return ca, cb, ignore
 
@@ -197,7 +205,8 @@ def formatt(c1, c2, c3, c4, seq, dicionario):
 def finiteArrayDefinition(array, n):
     '''Define a Cadeida de Conjuntos Finitos'''
     fullseq = [] # irá conter a sequência dos passos desta verificação
-    seq = ['e'] # irá conter a cadeira de conjuntos finitos
+    seq = ['e']  # irá conter a cadeira de conjuntos finitos
+    limit = 0
     fullseq.extend(seq)
     # encontra a última da parada
     for i in range(int(n + (len(array) / 5) - 1), n - 1, -1):
@@ -240,7 +249,7 @@ def showSeq(fullseq):
 def cycleSimplify(array, limit, n):
     '''Simplificação de Ciclos (caso seja necessário)'''
     # verifica se há alguma instrução fora do limite do programa
-    if (limit != int(n + len(array)/5)):
+    if (limit != int(n + len(array)/5) and limit != 0):
         out_of_bounds = [] # guardará o número das instruções a serem removidas
         for i in range(limit, int(n + len(array) / 5)):
             if (array[4 + (5 * (i - n))] > 0):
@@ -259,6 +268,58 @@ def cycleSimplify(array, limit, n):
                     array[(j*2-1) + (5 * (i - n))] = "ciclo"
                     array[j*2 + (5 * (i - n))] = 'w'
     return array
+
+def comparison(array1,array2):
+    '''Comparação dos dois programas'''
+    n = int(len(array1) / 5)
+    m = n + int(len(array2) / 5)
+    b = []
+    works = True
+    compared1 = []
+    compared2 = []
+    b.append([array1[0],array2[n]])
+    i = 1
+    j = 1
+    try:
+        for i in range(1, n):
+            p1 = [array1[2 + (5 * i)], array1[4 + (5 * i)]]
+            if (check(p1, compared1)):
+                continue
+            else:
+                compared1.append(p1)
+            while (j < m and check([array2[2 + (5 * j)], array2[4 + (5 * j)]], compared2)):
+                j += 1
+            p2 = [array2[2 + (5 * j)], array2[4 + (5 * j)]]
+            compared2.append(p2)
+            b.append([[p1[0], p2[0]], [p1[1], p2[1]]])
+            if (not verify(p1[0], p2[0]) or not verify(p1[1], p2[1])):
+                works = False
+    except:
+        works = False
+    return compFormat(b), works
+
+def check(array, data):
+        return True if array in data else False
+
+def verify(first, second):
+    '''Compara a equivalência de dois rótulos'''
+    # Retorna True se: ambas forem 0, w ou se foram números maiores que 0
+    # Retorna False se: uma for str e a outra int ou se uma for 0 e a outra maior que 0
+    if (first == second):
+        return True
+    else:
+        if (type(first) == str or type(second) == str):
+            return False
+        else:
+            return True if first > 0 and second > 0 else False
+
+def compFormat(b):
+    i = 0
+    aux = ''
+    for each in b:
+        aux += ("B{0}: {1}\n".format(i, each))
+        i += 1
+    return aux+"B{0}: []".format(i)
 
 def textFormat(array):
     '''Transforma o array em uma string para ser exibida'''

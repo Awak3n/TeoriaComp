@@ -68,6 +68,7 @@ class Application():
 
 	def backInBlack(self):
 		'''Retorna para o estado inicial do programa'''
+		self.btn.configure(state=NORMAL)
 		self.btn.unbind_all
 		self.btn.bind("<Button-1>", self.action_n1)
 		self.ltb.configure(state=NORMAL)
@@ -186,14 +187,24 @@ class Application():
 
 	def action_n4(self,event):
 		'''Passo 4 - Comparação dos Programas'''
-		# logic comparison logic
+		result, works = logic.comparison(self.line_p1c, self.line_p2c)
 		self.ltb.configure(state=NORMAL)
-		self.ltb.delete('1.0','end')
-		self.ltb.insert('1.0', logic.textFormat(self.line_p1cs)+logic.textFormat(self.line_p2cs))
-		self.ltb.configure(state=DISABLED)
+		self.ltb.delete('1.0', 'end')
+		line = []
+		line.extend(self.line_p1cs)
+		line.extend(self.line_p2cs)
+		self.ltb.insert('1.0', logic.textFormat(line))
 		self.rtb.configure(state=NORMAL)
-		self.rtb.delete('1.0','end')
+		self.rtb.delete('1.0', 'end')
+		self.rtb.insert('1.0', result)
 		# comparison exhibition logic
+		if(works):
+			self.ltb.insert('end', "\n# Os Programas são equivalentes!")
+			messagebox.showinfo(icon="info",title='Sucesso',message="Os Programas são fortemente equivalentes!")
+		else:
+			self.ltb.insert('end', "\n# Os Programas não são equivalentes!")
+			messagebox.showinfo(icon="warning",title='Falha',message="Os Programas não são equivalentes!")
+		self.ltb.configure(state=DISABLED)
 		self.rtb.configure(state=DISABLED)
 		self.btn.unbind_all
 		self.btn.configure(state=DISABLED)
