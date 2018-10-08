@@ -13,39 +13,44 @@ class Application():
 
 	def __init__(self, root):
 		'''Construtor da classe, recebe a janela como parâmetro'''
+		self.root = root
 		self.initComponents()
 		self.initMenu()
+
+	def start(self):
+		'''Inicia a aplicação'''
+		self.root.mainloop()
 		
 	def initComponents(self):
 		'''Inicizalização dos componentes principais da janela'''
-		root.title("Comparador de Programas 2000")
-		Label(root,text="Comparador de Programas Monolíticos",font=('Times',30)).grid(row=0,column=0,columnspan=2,sticky=W+E)
-		Label(root, text="Insira dois programas monolíticos no formato de instruções rolutadas \n e pressione prosseguir para compará-los.").grid(row=1, column=0, columnspan=2, sticky=W + E)
-		Label(root, text="Passo atual ", font=('Verdana', 20), fg="RED").grid(row=2, column=0, columnspan=2)
+		self.root.title("Comparador de Programas 2000")
+		Label(self.root,text="Comparador de Programas Monolíticos",font=('Times',30)).grid(row=0,column=0,columnspan=2,sticky=W+E)
+		Label(self.root, text="Insira dois programas monolíticos no formato de instruções rolutadas \n e pressione prosseguir para compará-los.").grid(row=1, column=0, columnspan=2, sticky=W + E)
+		Label(self.root, text="Passo atual ", font=('Verdana', 20), fg="RED").grid(row=2, column=0, columnspan=2)
 		self.ltxt= ["0 - Inserção dos Programas","1 - Definição das Instruções Rotuladas Compostas","2 - Definição da Cadeida de Conjuntos Finitos","3 - Simplificação de Ciclos","4 - Comparação dos Programas"]
-		self.lbl = Label(root,text=self.ltxt[0] , font=('Verdana',15), fg="RED")
+		self.lbl = Label(self.root,text=self.ltxt[0] , font=('Verdana',15), fg="RED")
 		self.lbl.grid(row=3, column=0,columnspan=2)
-		self.ltb = Text(root,width = 40, height = 20)
+		self.ltb = Text(self.root,width = 40, height = 20)
 		self.ltb.grid(row=4, column=0, sticky=E)
 		self.ltb.insert("1.0", "Se t1 vá_para 2 senão vá_para 0\nSe t2 vá_para 0 senão vá_para 3\nFaça V vá_para 4\nFaça W vá_para 2")
-		self.rtb = Text(root,width = 40, height = 20)
+		self.rtb = Text(self.root,width = 40, height = 20)
 		self.rtb.grid(row=4, column=1, sticky=E)
 		self.rtb.insert("1.0","Se t1 vá_para 2 senão vá_para 0\nSe t2 vá_para 3 senão vá_para 0\nSe t3 vá_para 0 senão vá_para 4\nFaça V vá_para 5\nFaça W vá_para 3")
-		self.btn = Button(root, text="Prosseguir")
+		self.btn = Button(self.root, text="Prosseguir")
 		self.btn.bind("<Button-1>",self.action_n1)
 		self.btn.grid(row=5,column=1,sticky=N)
-		self.retbtn = Button(root, text="Retroceder", state=DISABLED)
+		self.retbtn = Button(self.root, text="Retroceder", state=DISABLED)
 		self.retbtn.bind("<Button-1>",self.retaction_n1)
 		self.retbtn.grid(row=5,column=0,sticky=N)
 	
 	def initMenu(self):
-		menu = Menu(root)
+		menu = Menu(self.root)
 		file = Menu(menu, tearoff=0)
 		file.add_command(label="Abrir programas", command=self.loadProgram)
-		file.add_command(label="Sair", command=root.quit)
+		file.add_command(label="Sair", command=self.root.quit)
 		menu.add_cascade(label="Arquivo", menu=file)
 		menu.add_command(label="Sobre",command=self.showInfo)
-		root.config(menu=menu)
+		self.root.config(menu=menu)
 
 	def showInfo(self):
 		messagebox.showinfo(icon="info", title='Sobre', message="Comparador de programas monolíticos feito por:\n\n#Êndril Castilho da Silveira\n#Leonardo Pellegrini Silva\n\nMatrícula: 78226 e 78159")
@@ -100,7 +105,7 @@ class Application():
 				messagebox.showinfo(icon="warning",title='Aviso',message="Por favor, preencha os campos corretamente.")
 				
 	def retaction_n1(self,event):
-		'''Retrocede o estado do programa para o passo 1'''
+		'''Retrocede o estado do programa para o passo 0'''
 		self.btn.unbind_all
 		self.btn.bind("<Button-1>", self.action_n1)
 		self.ltb.configure(state=NORMAL)
@@ -114,9 +119,9 @@ class Application():
 		self.lbl.configure(text=self.ltxt[0])
 		
 	def action_n2(self,event):
-		'''Passo 2 - Comparação do programa'''
-		self.showseq_p1, self.seq_p1 = logic.finiteArrayDefinition(self.line_p1c, 0)
-		self.showseq_p2, self.seq_p2 = logic.finiteArrayDefinition(self.line_p2c, int(len(self.line_p1c) / 5))
+		'''Passo 2 - Definição da Cadeia de Conjuntos Finitos'''
+		self.showseq_p1, self.seq_p1, self.limit_p1 = logic.finiteArrayDefinition(self.line_p1c, 0)
+		self.showseq_p2, self.seq_p2, self.limit_p2 = logic.finiteArrayDefinition(self.line_p2c, int(len(self.line_p1c) / 5))
 		self.btn.unbind_all
 		self.btn.bind("<Button-1>", self.action_n3)
 		self.ltb.configure(state=NORMAL)
@@ -130,7 +135,7 @@ class Application():
 		self.lbl.configure(text=self.ltxt[2])
 		
 	def retaction_n2(self,event):
-		'''Retrocede o estado do programa para o passo 2'''
+		'''Retrocede o estado do programa para o passo 1'''
 		self.btn.unbind_all
 		self.btn.bind("<Button-1>", self.action_n2)
 		self.ltb.configure(state=NORMAL)
@@ -147,8 +152,8 @@ class Application():
 
 	def action_n3(self,event):
 		'''Passo 3 - Simplificação de Ciclos (se necessário)'''
-		self.line_p1cs, test_p1 = logic.cycleSimplify(self.line_p1c, self.seq_p1)
-		self.line_p2cs, test_p2 = logic.cycleSimplify(self.line_p2c, self.seq_p2)
+		self.line_p1cs = logic.cycleSimplify(self.line_p1c, self.limit_p1, 0)
+		self.line_p2cs = logic.cycleSimplify(self.line_p2c, self.limit_p2,  int(len(self.line_p1c) / 5))
 		self.ltb.configure(state=NORMAL)
 		self.ltb.delete('1.0','end')
 		self.ltb.insert('1.0', logic.textFormat(self.line_p1cs))
@@ -164,7 +169,7 @@ class Application():
 		self.lbl.configure(text=self.ltxt[3])
 
 	def retaction_n3(self,event):
-		'''Retrocede o estado do programa para o passo 3'''
+		'''Retrocede o estado do programa para o passo 2'''
 		self.ltb.configure(state=NORMAL)
 		self.ltb.delete('1.0','end')
 		self.ltb.insert('1.0', logic.textFormat(self.line_p1c)+"\n"+self.showseq_p1)
@@ -179,17 +184,16 @@ class Application():
 		self.retbtn.bind("<Button-1>",self.retaction_n2)
 		self.lbl.configure(text=self.ltxt[2])
 
-
 	def action_n4(self,event):
 		'''Passo 4 - Comparação dos Programas'''
-
+		# logic comparison logic
 		self.ltb.configure(state=NORMAL)
 		self.ltb.delete('1.0','end')
 		self.ltb.insert('1.0', logic.textFormat(self.line_p1cs)+logic.textFormat(self.line_p2cs))
 		self.ltb.configure(state=DISABLED)
 		self.rtb.configure(state=NORMAL)
 		self.rtb.delete('1.0','end')
-		# comparison logic
+		# comparison exhibition logic
 		self.rtb.configure(state=DISABLED)
 		self.btn.unbind_all
 		self.btn.configure(state=DISABLED)
@@ -198,7 +202,7 @@ class Application():
 		self.lbl.configure(text=self.ltxt[4])
 
 	def retaction_n4(self,event):
-		'''Retrocede o estado do programa para o passo 4'''
+		'''Retrocede o estado do programa para o passo 3'''
 		self.ltb.configure(state=NORMAL)
 		self.ltb.delete('1.0','end')
 		self.ltb.insert('1.0', logic.textFormat(self.line_p1cs))
@@ -218,4 +222,4 @@ class Application():
 if __name__ == '__main__':
 	root = Tk()
 	app = Application(root)
-	root.mainloop()
+	app.start()

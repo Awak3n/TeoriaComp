@@ -196,11 +196,12 @@ def formatt(c1, c2, c3, c4, seq, dicionario):
 
 def finiteArrayDefinition(array, n):
     '''Define a Cadeida de Conjuntos Finitos'''
-    fullseq = []
-    seq = ['e']
+    fullseq = [] # irá conter a sequência dos passos desta verificação
+    seq = ['e'] # irá conter a cadeira de conjuntos finitos
     fullseq.extend(seq)
     # encontra a última da parada
-    for i in range(int(n + (len(array) / 5)-1), n-1, -1):
+    for i in range(int(n + (len(array) / 5) - 1), n - 1, -1):
+        # verifica se a instrução possui uma parada
         if (array[2 + (5 * (i - n))] == 0 or array[4 + (5 * (i - n))] == 0):
             limit = array[0 + (5 * (i - n))]
             seq.append(array[0 + (5 * (i - n))])
@@ -216,7 +217,7 @@ def finiteArrayDefinition(array, n):
                 seq.append(array[0 + (5 * (i - n))])
                 fullseq.extend(seq)
                 x += 1
-    return showSeq(fullseq),seq
+    return showSeq(fullseq),seq, limit
 
 def showSeq(fullseq):
     '''Retorna a sequência de instruções formatada'''
@@ -236,17 +237,37 @@ def showSeq(fullseq):
     aux += ("A{0}: {1}\n".format(count, seq))
     return aux
 
-def cycleSimplify(array, seq):
+def cycleSimplify(array, limit, n):
     '''Simplificação de Ciclos (caso seja necessário)'''
-    if (len(seq) != len(array)):
-        print("código aqui")
-        return array, 1
-    else:
-        return array, 0
+    # verifica se há alguma instrução fora do limite do programa
+    if (limit != int(n + len(array)/5)):
+        out_of_bounds = [] # guardará o número das instruções a serem removidas
+        for i in range(limit, int(n + len(array) / 5)):
+            if (array[4 + (5 * (i - n))] > 0):
+                out_of_bounds.append(array[0 + (5 * (i - n))])
+            # caso haja o formato (instrução,número),(parada,0), a instrução antes da parada será ignorada
+            if (i != limit):
+                if (array[2 + (5 * (i - n))] > 0):
+                    out_of_bounds.append(array[0 + (5 * (i - n))])
+        # remoção das linhas fora do limite
+        while (limit != int(n + len(array) / 5)):
+            array.pop()
+        # substituição das instruções fora do limite por ciclos
+        for i in range(n, int(n + len(array) / 5)):
+            for j in range(1,3):
+                if (array[j*2 + (5 * (i - n))] in out_of_bounds):
+                    array[(j*2-1) + (5 * (i - n))] = "ciclo"
+                    array[j*2 + (5 * (i - n))] = 'w'
+    return array
 
 def textFormat(array):
     '''Transforma o array em uma string para ser exibida'''
     aux = ''
     for i in range(0, int(len(array)/5)):
-        aux+=("{0}: ({1},{2}),({3},{4})\n".format(array[0 + (5 * i)], array[1 + (5 * i)], array[2 + (5 * i)], array[3 + (5 * i)], array[4 + (5 * i)]))
-    return aux
+        aux += ("{0}: ({1},{2}),({3},{4})\n".format(array[0 + (5 * i)], array[1 + (5 * i)], array[2 + (5 * i)], array[3 + (5 * i)], array[4 + (5 * i)]))
+    # Adiciona uma instrução de ciclo ao final do programa
+    if ('ciclo' in array):
+        return aux+("{0}: ({1},{0}),({1},{0})\n".format('w',"ciclo"))
+    else:
+        return aux
+
