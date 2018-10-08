@@ -4,12 +4,12 @@ from tkinter import messagebox
 
 def translation(line_p):
     line_count = 1
-    newline_p = [] #string que irá salvar o programa formatado
-    for line in line_p.split('\n'):
+    newline_p = [] # string que irá salvar o programa formatado
+    for line in line_p.split('\n'): # recebe os dados da caixa de texto e os formata com rótulos de instrução
         if (line != ''):
             newline_p.append("%i: %s" % (line_count, line))
             line_count += 1
-    if (line_count == 1):
+    if (line_count == 1): # caso o programa não possua linhas escritas
         messagebox.showinfo(icon="error", title='Erro', message="Programa vazio.")
     else:
         newline_p = conversion(newline_p)
@@ -17,7 +17,7 @@ def translation(line_p):
 
 def numCorrection(array,n):
     '''Recebe um array de comandos e corrige o número de suas instruções'''
-    for i in range(0, int(len(array) / 5)):
+    for i in range(0, int(len(array) / 5)): # corrige apontamentos de parada e o número das instruções do segundo programa
         array[0 + (i * 5)] = int(array[0 + (i * 5)] + n/5)
         if array[1 + (i * 5)] is 'parada':
             array[2 + (i * 5)] = 0
@@ -52,14 +52,12 @@ def conversion(lines):
         # se for um Se...
         if 'se' in line:
             try:
-                # procura a posição do primeiro parâmentro
-                position_p1 = line.find('para ') + 5
+                position_p1 = line.find('para ') + 5 # procura a posição do primeiro parâmentro
                 if (line[position_p1] == line[0]): 
                     messagebox.showinfo(icon="warning", title='Ciclo infinito', message="A instrução " + str(line[0]) + " aponta para ela mesma.")
                     return  
                 param1 = paramNumber(position_p1, line)
-                # procura a posição do segundo parâmentro
-                position_p2 = position_p1 + line[position_p1:].find('para ') + 5
+                position_p2 = position_p1 + line[position_p1:].find('para ') + 5 # procura a posição do segundo parâmentro
                 if (line[position_p2] == line[0]): 
                     messagebox.showinfo(icon="warning", title='Ciclo infinito', message="A instrução " + str(line[0]) + " aponta para ela mesma.")
                     return
@@ -67,6 +65,7 @@ def conversion(lines):
                     messagebox.showinfo(icon="error", title='Erro', message="A instrução " + str(line[0]) + " aponta para o mesmo lugar mais de uma vez.")
                     return
                 param2 = paramNumber(position_p2, line)
+                # adiciona as duas variações da instrução nas listas
                 lc1.append(int(param1))
                 lc2.append(int(param2))
                 if int(param1) == 0 or int(param1) > len(lines):
@@ -84,15 +83,14 @@ def conversion(lines):
             # se for um Faça...
             if 'faça' in line:
                 try:
-                    # procura a posição do primeiro parâmentro
-                    position_p1 = line.find('faça ') + 5
+                    position_p1 = line.find('faça ') + 5 # procura a posição do primeiro parâmentro
                     param1 = paramNumber(position_p1, line_original)
-                    # procura a posição do segundo parâmentro
-                    position_p2 = position_p1 + line[position_p1:].find('para ') + 5
+                    position_p2 = position_p1 + line[position_p1:].find('para ') + 5 # procura a posição do segundo parâmentro
                     if (line[position_p2] == line[0]): 
                         messagebox.showinfo(icon="warning", title='Ciclo infinito', message="A instrução " + str(line[0]) + " aponta para ela mesma.")
                         return 
                     param2 = paramNumber(position_p2, line)
+                    # adiciona a mesma instrução duas vezes nas listas
                     lc1.append(int(param2))
                     lc2.append(int(param2))
                     opc1.append(param1)
@@ -208,20 +206,16 @@ def finiteArrayDefinition(array, n):
     seq = ['e']  # irá conter a cadeira de conjuntos finitos
     limit = 0
     fullseq.extend(seq)
-    # encontra a última da parada
-    for i in range(int(n + (len(array) / 5) - 1), n - 1, -1):
-        # verifica se a instrução possui uma parada
-        if (array[2 + (5 * (i - n))] == 0 or array[4 + (5 * (i - n))] == 0):
+    for i in range(int(n + (len(array) / 5) - 1), n - 1, -1): # encontra a última da parada
+        if (array[2 + (5 * (i - n))] == 0 or array[4 + (5 * (i - n))] == 0): # verifica se a instrução possui uma parada
             limit = array[0 + (5 * (i - n))]
             seq.append(array[0 + (5 * (i - n))])
             fullseq.extend(seq)
             break
-    # procura todas as menções à essa instrução e as anteriores
     x = 1
-    while (x != 0):
+    while (x != 0): # procura todas as menções à essa instrução e as anteriores
         x = 0
-        for i in range(limit - 1, n - 1, -1):
-            # verifica se a intrução aponta para a instrução anterior e se ainda não foi inclusa na sequência
+        for i in range(limit - 1, n - 1, -1): # verifica se a intrução aponta para a instrução anterior e se ainda não foi inclusa na sequência
             if (array[0 + (5 * (i - n))] not in seq and (array[2 + (5 * (i - n))] in seq or array[4 + (5 * (i - n))] in seq)):
                 seq.append(array[0 + (5 * (i - n))])
                 fullseq.extend(seq)
@@ -233,11 +227,12 @@ def showSeq(fullseq):
     aux = ''
     count = 0
     i = 0
-    while(i < len(fullseq)):
+    while (i < len(fullseq)): # percorre a sequência a formatando por meio das instruções de parada, ou os 'e'
         seq = []
-        if (fullseq[i] == 'e'):
+        if (fullseq[i] == 'e'): # se encontrar uma parada, começa a adicionar os elementos na lista A[i]
             seq.append(fullseq[i])
             i += 1
+            # enquando não encontrar outra parada, continua adicionando elementos na lista
             while (i < len(fullseq) and fullseq[i] != 'e'):
                 seq.append(fullseq[i])
                 i += 1
@@ -248,21 +243,17 @@ def showSeq(fullseq):
 
 def cycleSimplify(array, limit, n):
     '''Simplificação de Ciclos (caso seja necessário)'''
-    # verifica se há alguma instrução fora do limite do programa
-    if (limit != int(n + len(array)/5) and limit != 0):
+    if (limit != int(n + len(array)/5) and limit != 0): # verifica se há alguma instrução fora do limite do programa
         out_of_bounds = [] # guardará o número das instruções a serem removidas
         for i in range(limit, int(n + len(array) / 5)):
             if (array[4 + (5 * (i - n))] > 0):
                 out_of_bounds.append(array[0 + (5 * (i - n))])
-            # caso haja o formato (instrução,número),(parada,0), a instrução antes da parada será ignorada
-            if (i != limit):
+            if (i != limit): # caso haja o formato (instrução,número),(parada,0), a instrução antes da parada será ignorada
                 if (array[2 + (5 * (i - n))] > 0):
                     out_of_bounds.append(array[0 + (5 * (i - n))])
-        # remoção das linhas fora do limite
-        while (limit != int(n + len(array) / 5)):
+        while (limit != int(n + len(array) / 5)): # remoção das linhas fora do limite
             array.pop()
-        # substituição das instruções fora do limite por ciclos
-        for i in range(n, int(n + len(array) / 5)):
+        for i in range(n, int(n + len(array) / 5)): # substituição das instruções fora do limite por ciclos
             for j in range(1,3):
                 if (array[j*2 + (5 * (i - n))] in out_of_bounds):
                     array[(j*2-1) + (5 * (i - n))] = "ciclo"
@@ -271,13 +262,15 @@ def cycleSimplify(array, limit, n):
 
 def comparison(array1,array2):
     '''Comparação dos dois programas'''
+    # definição dos limites de cada programa
     n = int(len(array1) / 5)
     m = n + int(len(array2) / 5)
     b = []
     works = True
     compared1 = []
     compared2 = []
-    b.append([array1[0],array2[n]])
+    b.append([array1[0], array2[0]])
+    # se as instruções não forem equivalentes, o programa marca seu estado como não equivalente
     if (not verify(array1[2], array2[2]) or not verify(array1[4], array2[4])):
         works = False
     i = 1
@@ -285,14 +278,16 @@ def comparison(array1,array2):
     try:
         for i in range(1, n):
             p1 = [array1[2 + (5 * i)], array1[4 + (5 * i)]]
-            if (check(p1, compared1)):
+            if (check(p1, compared1)): # verifica se um determinado par no primeiro programa já foi comparado
                 continue
             else:
                 compared1.append(p1)
+            # verifica se ainda existem pares no segundo programa que não foram comparados
             while (j < m and check([array2[2 + (5 * j)], array2[4 + (5 * j)]], compared2)):
                 j += 1
             p2 = [array2[2 + (5 * j)], array2[4 + (5 * j)]]
             compared2.append(p2)
+            # se as instruções não forem equivalentes, o programa marca seu estado como não equivalente
             b.append([[p1[0], p2[0]], [p1[1], p2[1]]])
             if (not verify(p1[0], p2[0]) or not verify(p1[1], p2[1])):
                 works = False
@@ -300,13 +295,14 @@ def comparison(array1,array2):
         works = False
     return compFormat(b), works
 
-def check(array, data):
-        return True if array in data else False
+def check(array, data): 
+    '''Verifica de um dado par de rótulos já foi comparado'''
+    return True if array in data else False
 
 def verify(first, second):
     '''Compara a equivalência de dois rótulos'''
-    # Retorna True se: ambas forem 0, w ou se foram números maiores que 0
-    # Retorna False se: uma for str e a outra int ou se uma for 0 e a outra maior que 0
+    # Retorna True se: ambos forem 0, w ou se foram números maiores que 0
+    # Retorna False se: um for str e o outro int ou se um for 0 e o outro maior que 0
     if (first == second):
         return True
     else:
@@ -316,20 +312,21 @@ def verify(first, second):
             return True if first > 0 and second > 0 else False
 
 def compFormat(b):
+    '''Formata o conjundo de pares de rótulos'''
     i = 0
     aux = ''
     for each in b:
         aux += ("B{0}: {1}\n".format(i, each))
         i += 1
+    # adiciona o último conjunto vazio
     return aux+"B{0}: []".format(i)
 
 def textFormat(array):
-    '''Transforma o array em uma string para ser exibida'''
+    '''Formata o conjunto de rótulos em uma string para exibição'''
     aux = ''
     for i in range(0, int(len(array)/5)):
         aux += ("{0}: ({1},{2}),({3},{4})\n".format(array[0 + (5 * i)], array[1 + (5 * i)], array[2 + (5 * i)], array[3 + (5 * i)], array[4 + (5 * i)]))
-    # Adiciona uma instrução de ciclo ao final do programa
-    if ('ciclo' in array):
+    if ('ciclo' in array): # Caso necessário, adiciona uma instrução de ciclo ao final do programa
         return aux+("{0}: ({1},{0}),({1},{0})\n".format('w',"ciclo"))
     else:
         return aux

@@ -32,10 +32,8 @@ class Application():
 		self.lbl.grid(row=3, column=0,columnspan=2)
 		self.ltb = Text(self.root,width = 40, height = 20)
 		self.ltb.grid(row=4, column=0, sticky=E)
-		self.ltb.insert("1.0", "Se t1 vá_para 2 senão vá_para 0\nSe t2 vá_para 0 senão vá_para 3\nFaça V vá_para 4\nFaça W vá_para 2")
 		self.rtb = Text(self.root,width = 40, height = 20)
 		self.rtb.grid(row=4, column=1, sticky=E)
-		self.rtb.insert("1.0","Se t1 vá_para 2 senão vá_para 0\nSe t2 vá_para 3 senão vá_para 0\nSe t3 vá_para 0 senão vá_para 4\nFaça V vá_para 5\nFaça W vá_para 3")
 		self.btn = Button(self.root, text="Prosseguir")
 		self.btn.bind("<Button-1>",self.action_n1)
 		self.btn.grid(row=5,column=1,sticky=N)
@@ -44,6 +42,7 @@ class Application():
 		self.retbtn.grid(row=5,column=0,sticky=N)
 	
 	def initMenu(self):
+		'''Inicializaçao da barra de menu'''
 		menu = Menu(self.root)
 		file = Menu(menu, tearoff=0)
 		file.add_command(label="Abrir programas", command=self.loadProgram)
@@ -53,6 +52,7 @@ class Application():
 		self.root.config(menu=menu)
 
 	def showInfo(self):
+		'''Exibe dados sobre os criadores '''
 		messagebox.showinfo(icon="info", title='Sobre', message="Comparador de programas monolíticos feito por:\n\n#Êndril Castilho da Silveira\n#Leonardo Pellegrini Silva\n\nMatrícula: 78226 e 78159")
 
 	def loadProgram(self):
@@ -89,7 +89,7 @@ class Application():
 			try:
 				self.line_p1c = logic.translation(self.line_p1)
 				self.line_p2c = logic.translation(self.line_p2)
-				if (len(self.line_p1c) != 0 or len(self.line_p2c) != 0):
+				if (len(self.line_p1c) != 0 or len(self.line_p2c) != 0): #corrige os números dos rótulos do segundo programa
 					self.line_p2c = logic.numCorrection(self.line_p2c,len(self.line_p1c))
 				self.btn.unbind_all
 				self.btn.bind("<Button-1>", self.action_n2)
@@ -197,13 +197,13 @@ class Application():
 		self.rtb.configure(state=NORMAL)
 		self.rtb.delete('1.0', 'end')
 		self.rtb.insert('1.0', result)
-		# comparison exhibition logic
+		self.ltb.insert('end', "\n# Os Programas:")
 		if(works):
-			self.ltb.insert('end', "\n# Os Programas são equivalentes!")
+			self.ltb.insert('end', "\n# São fortemente equivalentes!")
 			messagebox.showinfo(icon="info",title='Sucesso',message="Os Programas são fortemente equivalentes!")
 		else:
-			self.ltb.insert('end', "\n# Os Programas não são equivalentes!")
-			messagebox.showinfo(icon="warning",title='Falha',message="Os Programas não são equivalentes!")
+			self.ltb.insert('end', "\n# Não são fortemente equivalentes!")
+			messagebox.showinfo(icon="warning",title='Falha',message="Os Programas não são fortemente equivalentes!")
 		self.ltb.configure(state=DISABLED)
 		self.rtb.configure(state=DISABLED)
 		self.btn.unbind_all
