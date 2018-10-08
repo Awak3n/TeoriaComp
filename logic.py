@@ -278,6 +278,8 @@ def comparison(array1,array2):
     compared1 = []
     compared2 = []
     b.append([array1[0],array2[n]])
+    if (not verify(array1[2], array2[2]) or not verify(array1[4], array2[4])):
+        works = False
     i = 1
     j = 1
     try:
